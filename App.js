@@ -12,7 +12,7 @@ const LoginScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-      <ImageBackground source={require('assets/imgb.png')} style={styles.container}>
+      <ImageBackground source={require('./assets/imgb.png')} style={styles.container}>
         <Text style={styles.title}>Report admin</Text>
         <TextInput
           style={styles.input}
