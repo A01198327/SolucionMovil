@@ -254,6 +254,22 @@ export const App = () => {
           name="Login" 
           component={LoginScreen} 
           options={{ headerShown: false }} 
+
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+      <ImageBackground source={require('./assets/imgb.png')} style={styles.container}>
+        <Text style={styles.title}>Report admin</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Usuario"
+          value={username}
+          onChangeText={setUsername}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
         />
         <Stack.Screen name="Menu" component={HomeScreen} />
         <Stack.Screen name="Report" component={GenerateReportScreen} />
