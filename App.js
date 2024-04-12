@@ -40,24 +40,24 @@ export const App = () => {
 
     return (
       <View style={styles.container}>
-        <Text style={styles.header}>Genera tu reporte</Text>
+        <Text style={styles.header2}>Genera tu reporte</Text>
         
         <Text style={styles.label}>Título (Descripción breve)</Text>
-        <TextInput style={styles.input} value={title} onChangeText={setTitle} />
+        <TextInput style={styles.inputreport} value={title} onChangeText={setTitle} />
 
-        <Text style={styles.label}>Tienda</Text>
-        <TextInput style={styles.input} value={store} onChangeText={setStore} />
+        <Text style={styles.label2}>Tienda</Text>
+        <TextInput style={styles.inputreport} value={store} onChangeText={setStore} />
 
-        <Text style={styles.label}>Sucursal</Text>
-        <TextInput style={styles.input} value={branch} onChangeText={setBranch} />
+        <Text style={styles.label2}>Sucursal</Text>
+        <TextInput style={styles.inputreport} value={branch} onChangeText={setBranch} />
 
-        <Text style={styles.label}>Describe la anomalía</Text>
-        <TextInput style={styles.input2} value={description} onChangeText={setDescription} multiline />
+        <Text style={styles.label2}>Describe la anomalía</Text>
+        <TextInput style={styles.inputreport2} value={description} onChangeText={setDescription} multiline />
 
-        <Text style={styles.label}>Agrega una imagen que apoye tu reporte</Text>
+        <Text style={styles.label2}>Agrega una imagen que apoye tu reporte</Text>
         {/* Aquí  agregar un componente para subir imágenes */}
 
-        <TouchableOpacity style={styles.button} onPress={handleGenerateReport}>
+        <TouchableOpacity style={styles.buttonreport} onPress={handleGenerateReport}>
           <Text style={styles.buttonText}>Generar mi reporte</Text>
         </TouchableOpacity>
       </View>
@@ -65,9 +65,15 @@ export const App = () => {
   };
 
   const HistoryScreen = () => {
-    return <Text>Esta es la pantalla de Historial de Reportes</Text>;
-  };
+    const [pendientes, setpendiente] = useState('');
+    const [aprovados, setaprovados] = useState('');
+    const [rechazados, setrechazados] = useState('');
 
+    return 
+    <View style={styles.container}>
+    <Text style={styles.header2}>Genera tu reporte</Text>
+    </View>
+  };
   const RankingScreen = () => {
     return <Text>Esta es la pantalla de Ranking</Text>;
   };
@@ -146,9 +152,9 @@ export const App = () => {
   </TouchableOpacity>
         </ImageBackground>
         <View style={styles.footer}>
-          <Text>Contacto</Text>
-          <Text>mkt@ejemplo.ejemplo.com</Text>
-          <Text>+50 1 234 5678</Text>
+          <Text style={styles.footertext1}>Contacto</Text>
+          <Text style={styles.footertext2}>mkt@ejemplo.ejemplo.com</Text>
+          <Text style={styles.footertext3}>+50 1 234 5678</Text>
         </View>
       </ScrollView>
     );
@@ -162,6 +168,14 @@ export const App = () => {
       fontFamily: "NunitoSansBold",
       marginBottom: 70,
       alignSelf: 'flex-start'
+    },  
+    header2: {
+      fontSize: 30,
+      fontFamily: "NunitoSansBold",
+      alignSelf: 'flex-start',
+      marginLeft: 0,
+      marginTop: -100,
+      paddingLeft: 45,
     },
     container: {
       flex: 1,
@@ -194,16 +208,49 @@ export const App = () => {
       width: '80%',
       fontFamily: "InterBold",
     },
-    input2: {
-      height: 15,
-      borderColor: 'gray',
+
+    inputreport: {
+      color: 'black',
+      height: 40,
+      borderColor: '#dbd6d6',
       borderWidth: 1,
       marginBottom: 10,
       paddingLeft: 8,
-      borderRadius: 20,
+      borderRadius: 0,
       width: '80%',
       fontFamily: "InterBold",
+      backgroundColor: '#dbd6d6'
     },
+
+    inputreport2: {
+      height: 100,
+      borderColor: '#dbd6d6',
+      borderWidth: 1,
+      marginBottom: 10,
+      paddingLeft: 8,
+      borderRadius: 0,
+      width: '80%',
+      fontFamily: "InterBold",
+      backgroundColor: '#dbd6d6'
+    },
+    label: {
+      color: 'black',
+      marginTop: 25,
+      fontFamily: "Inter",
+      fontSize: 18,
+      alignSelf: 'flex-start',
+      paddingLeft: 45
+    },
+
+    label2: {
+      color: 'black',
+      marginTop: 0,
+      fontFamily: "Inter",
+      fontSize: 18,
+      alignSelf: 'flex-start',
+      paddingLeft: 45
+    },
+  
     link: {
       color: 'blue',
       marginTop: 0,
@@ -213,6 +260,16 @@ export const App = () => {
       padding: 10,
       borderRadius: 15, 
       alignItems: 'center',
+      marginBottom: 20,
+      width: '80%', 
+      height: 50, 
+    },
+    buttonreport: {
+      backgroundColor: '#EDAC09', 
+      padding: 10,
+      borderRadius: 15, 
+      alignItems: 'center',
+      marginTop: 20,
       marginBottom: 20,
       width: '80%', 
       height: 50, 
@@ -235,14 +292,31 @@ export const App = () => {
       color: 'black',
       fontSize: 21,
       fontFamily: "Inter",
-      
+
     },
     footer: {
       marginTop: 0,
       backgroundColor: '#bdb7b7',
-      padding: 14,
-      color: '#fff',
+      padding: 10,
+      color: '#fff', 
     },
+    footertext1: {
+      color: 'black',
+      fontSize: 15,
+      fontFamily: "InterBold",
+    },
+    footertext2: {
+      color: 'black',
+      fontSize: 12,
+      fontFamily: "Inter",
+    }, 
+    footertext3: {
+      color: 'black',
+      fontSize: 12,
+      fontFamily: "Inter",
+      alignItems: 'right',
+    },
+
   });
 
   const Stack = createStackNavigator();
