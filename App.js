@@ -104,15 +104,15 @@ export const App = () => {
   const RankingScreen = () => {
     return (
       <View style={styles.container}>
-        <Text style={styles.header2}>Top Reporters</Text>
+        <Text style={styles.headerR}>Top Reporters</Text>
   
-        <View style={styles.grayContainer}>
+        <View style={styles.grayContainerR}>
           {/* Contenedor gris para Top Reporters */}
         </View>
   
-        <Text style={styles.labelH}>Tu</Text>
+        <Text style={styles.labelR}>Tu</Text>
   
-        <View style={styles.grayContainer}>
+        <View style={styles.grayContainerR2}>
           {/* Contenedor gris para tu reporte */}
         </View>
       </View>
@@ -214,6 +214,12 @@ export const App = () => {
       marginLeft: 0,
       marginTop: -100,
       paddingLeft: 45,
+    },
+    headerR: {
+      fontSize: 30,
+      fontFamily: "NunitoSansBold",
+      marginLeft: 0,
+      marginTop: 0,
     },
     container: {
       flex: 1,
@@ -363,6 +369,15 @@ export const App = () => {
       fontSize: 20,
       paddingLeft: 3
     },
+    labelR: {
+      color: 'black',
+      alignSelf: 'flex-start',
+      marginTop: 20,
+      marginBottom: 10,
+      fontFamily: "InterBold",
+      fontSize: 20,
+      paddingLeft: 40
+    },
 
     subtitleContainer: {
       alignSelf: 'flex-start',
@@ -377,6 +392,30 @@ export const App = () => {
       width: 350,
       height: 90, 
       paddingLeft: 45
+    },
+    grayContainer2: {
+      backgroundColor: '#dbd6d6',
+      alignSelf: 'flex-start',
+      padding: 10,
+      borderRadius: 10,
+      width: 350,
+      height: 150, 
+      paddingLeft: 45
+    },
+    grayContainerR2: {
+      backgroundColor: '#dbd6d6',
+      borderRadius: 10,
+      width: 365,
+      height: 110 
+    },
+
+    grayContainerR: {
+      backgroundColor: '#dbd6d6',
+      borderRadius: 10,
+      marginTop: 20,
+      width: 365,
+      height: 380, 
+
     },
   });
 
