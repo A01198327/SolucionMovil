@@ -78,7 +78,7 @@ export const App = () => {
           <Text style={styles.labelH}>Pendientes</Text>
           {/* Aquí funciones de los reportes pendientes */}
           <View style={styles.grayContainer}>
-            {/* Contenedor gris para los reportes pendientes */}
+            {/* Contenedor  para los reportes pendientes */}
           </View>
         </View>
 
@@ -86,7 +86,7 @@ export const App = () => {
           <Text style={styles.labelH}>Aprobados</Text>
           {/* Aquí funciones de los reportes aprobados */}
           <View style={styles.grayContainer}>
-            {/* Contenedor gris para los reportes aprobados */}
+            {/* Contenedor  para los reportes aprobados */}
           </View>
         </View>
 
@@ -94,7 +94,7 @@ export const App = () => {
           <Text style={styles.labelH}>Rechazados</Text>
           {/* Aquí funciones de los reportes rechazados */}
           <View style={styles.grayContainer}>
-            {/* Contenedor gris para los reportes rechazados */}
+            {/* Contenedor  para los reportes rechazados */}
           </View>
         </View>
       </View>
@@ -107,20 +107,34 @@ export const App = () => {
         <Text style={styles.headerR}>Top Reporters</Text>
   
         <View style={styles.grayContainerR}>
-          {/* Contenedor gris para Top Reporters */}
+          {/* Contenedor  para Top Reporters */}
         </View>
   
         <Text style={styles.labelR}>Tu</Text>
   
         <View style={styles.grayContainerR2}>
-          {/* Contenedor gris para tu reporte */}
+          {/* Contenedor  para tu reporte */}
         </View>
       </View>
     );
   };
 
   const ProfileScreen = () => {
-    return <Text>Esta es la pantalla de Mi Perfil</Text>;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.headerP}>Mi perfil</Text>
+  
+        <View style={styles.grayContainerP}>
+          {/* Contenedor  para Top Reporters */}
+        </View>
+  
+        <Text style={styles.labelP}>Mis logros</Text>
+  
+        <View style={styles.grayContainerR}>
+          {/* Contenedor  para tu reporte */}
+        </View>
+      </View>
+    );
   };
 
   const GameScreen = () => {
@@ -221,6 +235,15 @@ export const App = () => {
       marginLeft: 0,
       marginTop: 0,
     },
+    headerP: {
+      fontSize: 30,
+      fontFamily: "NunitoSansBold",
+      alignSelf: 'flex-start',
+      marginLeft: 0,
+      marginTop: -30,
+      paddingLeft: 40,
+    },
+
     container: {
       flex: 1,
       justifyContent: 'center',
@@ -378,7 +401,14 @@ export const App = () => {
       fontSize: 20,
       paddingLeft: 40
     },
-
+    labelP: {
+      color: 'black',
+      alignSelf: 'flex-start',
+      marginTop: 30,
+      fontFamily: "InterBold",
+      fontSize: 30,
+      paddingLeft: 40
+    },
     subtitleContainer: {
       alignSelf: 'flex-start',
       marginTop: 20,
@@ -408,7 +438,13 @@ export const App = () => {
       width: 365,
       height: 110 
     },
-
+    grayContainerP: {
+      backgroundColor: '#dbd6d6',
+      borderRadius: 10,
+      marginTop: 20,
+      width: 365,
+      height: 110 
+    },
     grayContainerR: {
       backgroundColor: '#dbd6d6',
       borderRadius: 10,
