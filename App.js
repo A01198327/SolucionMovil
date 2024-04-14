@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button } from 'react-native';
+import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font'; 
@@ -24,7 +24,6 @@ export const App = () => {
     return undefined;
   } else {
     SplashScreen.hideAsync();
-
   }
 
   const GenerateReportScreen = () => {
@@ -65,17 +64,59 @@ export const App = () => {
   };
 
   const HistoryScreen = () => {
-    const [pendientes, setpendiente] = useState('');
-    const [aprovados, setaprovados] = useState('');
-    const [rechazados, setrechazados] = useState('');
+    const [pendientes, setPendientes] = useState([]);
+    const [aprobados, setAprobados] = useState([]);
+    const [rechazados, setRechazados] = useState([]);
 
-    return 
-    <View style={styles.container}>
-    <Text style={styles.header2}>Genera tu reporte</Text>
-    </View>
+    // Aquí podrías tener lógica para obtener los reportes pendientes, aprobados y rechazados desde tu base de datos o donde los almacenes.
+
+    return (
+      <View style={styles.container}>
+        <Text style={styles.header2}>Historial de Reportes</Text>
+
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.labelH}>Pendientes</Text>
+          {/* Aquí funciones de los reportes pendientes */}
+          <View style={styles.grayContainer}>
+            {/* Contenedor gris para los reportes pendientes */}
+          </View>
+        </View>
+
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.labelH}>Aprobados</Text>
+          {/* Aquí funciones de los reportes aprobados */}
+          <View style={styles.grayContainer}>
+            {/* Contenedor gris para los reportes aprobados */}
+          </View>
+        </View>
+
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.labelH}>Rechazados</Text>
+          {/* Aquí funciones de los reportes rechazados */}
+          <View style={styles.grayContainer}>
+            {/* Contenedor gris para los reportes rechazados */}
+          </View>
+        </View>
+      </View>
+    );
   };
+
   const RankingScreen = () => {
-    return <Text>Esta es la pantalla de Ranking</Text>;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.header2}>Top Reporters</Text>
+  
+        <View style={styles.grayContainer}>
+          {/* Contenedor gris para Top Reporters */}
+        </View>
+  
+        <Text style={styles.labelH}>Tu</Text>
+  
+        <View style={styles.grayContainer}>
+          {/* Contenedor gris para tu reporte */}
+        </View>
+      </View>
+    );
   };
 
   const ProfileScreen = () => {
@@ -162,13 +203,10 @@ export const App = () => {
 
   const styles = StyleSheet.create({
     header: {
-      width: '100%',
-      padding: 20,
-      fontSize: 24,
+      fontSize: 30,
       fontFamily: "NunitoSansBold",
-      marginBottom: 70,
-      alignSelf: 'flex-start'
-    },  
+      marginBottom: 20,
+    },
     header2: {
       fontSize: 30,
       fontFamily: "NunitoSansBold",
@@ -316,7 +354,30 @@ export const App = () => {
       fontFamily: "Inter",
       alignItems: 'right',
     },
+    labelH: {
+      color: 'black',
+      alignSelf: 'flex-start',
+      marginTop: 20,
+      marginBottom: 5,
+      fontFamily: "Inter",
+      fontSize: 20,
+      paddingLeft: 3
+    },
 
+    subtitleContainer: {
+      alignSelf: 'flex-start',
+      marginTop: 20,
+      paddingLeft: 45
+    },
+    grayContainer: {
+      backgroundColor: '#dbd6d6',
+      alignSelf: 'flex-start',
+      padding: 10,
+      borderRadius: 10,
+      width: 350,
+      height: 90, 
+      paddingLeft: 45
+    },
   });
 
   const Stack = createStackNavigator();
