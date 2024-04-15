@@ -8,16 +8,17 @@ import { useEffect } from 'react';
 
 export const App = () => {
   const [fontsLoaded] = useFonts({
-    Inter: require("./assets/Fonts/Inter.ttf"),
-    InterBold: require("./assets/Fonts/Inter-Bold.ttf"),
-    NunitoSans: require("./assets/Fonts/NunitoSans.ttf"),
-    NunitoSansBold: require("./assets/Fonts/NunitoSans-ExtraBold.ttf"),
+    Inter: require("./src/assets/Fonts/Inter.ttf"),
+    InterBold: require("./src/assets/Fonts/Inter-Bold.ttf"),
+    NunitoSans: require("./src/assets/Fonts/NunitoSans.ttf"),
+    NunitoSansBold: require("./src/assets/Fonts/NunitoSans-ExtraBold.ttf"),
   });
   useEffect(() => {
     async function prepare() {
       await SplashScreen.preventAutoHideAsync();
     } 
     prepare();
+    
   }, []);
 
   if (!fontsLoaded) {
@@ -121,7 +122,7 @@ export const App = () => {
 
     return (
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <ImageBackground source={require('./assets/imgb.png')} style={styles.container}>
+        <ImageBackground source={require('./src/assets/imgb.png')} style={styles.container}>
           <Text style={styles.title}>Report admin</Text>
           <TextInput
             style={styles.input}
