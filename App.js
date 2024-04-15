@@ -5,13 +5,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font'; 
 import * as SplashScreen from 'expo-splash-screen'; 
 import { useEffect } from 'react';
+import axios from 'axios';
+
+
 
 export const App = () => {
   const [fontsLoaded] = useFonts({
-    Inter: require("./assets/Fonts/Inter.ttf"),
-    InterBold: require("./assets/Fonts/Inter-Bold.ttf"),
-    NunitoSans: require("./assets/Fonts/NunitoSans.ttf"),
-    NunitoSansBold: require("./assets/Fonts/NunitoSans-ExtraBold.ttf"),
+    Inter: require("./assets/Inter.ttf"),
+    InterBold: require("./assets/Inter-Bold.ttf"),
+    NunitoSans: require("./assets/NunitoSans.ttf"),
+    NunitoSansBold: require("./assets/NunitoSans-ExtraBold.ttf"),
   });
   useEffect(() => {
     async function prepare() {
@@ -33,10 +36,23 @@ export const App = () => {
     const [branch, setBranch] = useState('');
     const [description, setDescription] = useState('');
 
-    const handleGenerateReport = () => {
+    const handleGenerateReport = async (titulo, desc, IDempleado) => {
       console.log('Generar reporte');
-      // Aquí  agregar la lógica para generar el reporte
-    };
+      try {
+        const response = await axios.post('http://localhost:5000/insertReporte', {
+          titulo: titulo,
+          descripcion: desc,
+          IDempleado: IDempleado,
+        });
+    
+        console.log('Response data:', response.data);
+        return response.data;
+      } catch (error) {
+        console.error('Error:', error);
+        return { success: false, error: 'Error' };
+      }
+    };    
+    
 
     return (
       <View style={styles.container}>
@@ -57,7 +73,7 @@ export const App = () => {
         <Text style={styles.label}>Agrega una imagen que apoye tu reporte</Text>
         {/* Aquí  agregar un componente para subir imágenes */}
 
-        <TouchableOpacity style={styles.button} onPress={handleGenerateReport}>
+        <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, 1)}>
           <Text style={styles.buttonText}>Generar mi reporte</Text>
         </TouchableOpacity>
       </View>
