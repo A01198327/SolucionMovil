@@ -4,7 +4,7 @@ const reportes = require("../services/reportes");
 
 router.get('/', async function (req, res, next){
     try {
-        res.json(await reportes.getMultiple(req.query.page));
+        res.json(await reportes.getMax(req.query));
     } catch (err) {
         console.error(`Error`, err.message);
         next(err);

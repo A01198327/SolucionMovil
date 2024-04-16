@@ -11,4 +11,11 @@ async function getMultiple(){
     }
 }
 
-module.exports = {getMultiple};
+async function getMax(){
+    const data = await database.query(`SELECT MAX(IDReporte) FROM Reporte`);
+    return {
+        data,
+    }
+}
+
+module.exports = {getMultiple, getMax};

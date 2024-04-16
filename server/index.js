@@ -2,9 +2,10 @@ const express = require("express");
 const app = express(); 
 //const database = require("./services/database");
 const path = require("path");
-const port = 5000
-const reportesRouter = require("./routes/reportes")
-const reportesPostRouter = require("./routes/insertReportes")
+const port = 5000;
+const reportesRouter = require("./routes/reportes");
+const reportesPostRouter = require("./routes/insertReportes");
+const reportesMaxRouter = require("./routes/getMax");
 const cors = require('cors');
 
 
@@ -19,6 +20,7 @@ app.use(express.urlencoded({
 app.use(cors());
 app.use("/reportes", reportesRouter);
 app.use("/insertReporte", reportesPostRouter);
+app.use("/getMax", reportesMaxRouter);
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   console.error(err.message, err.stack);

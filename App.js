@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button } from 'react-native';
+import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font'; 
 import * as SplashScreen from 'expo-splash-screen'; 
 import { useEffect } from 'react';
 import axios from 'axios';
+import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
 
 
 
@@ -35,14 +38,18 @@ export const App = () => {
     const [store, setStore] = useState('');
     const [branch, setBranch] = useState('');
     const [description, setDescription] = useState('');
+    const [file, setFile] = useState(null);
+    const [error, setError] = useState(null);
 
-    const handleGenerateReport = async (titulo, desc, IDempleado) => {
+    const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
       try {
         const response = await axios.post('http://localhost:5000/insertReporte', {
           titulo: titulo,
           descripcion: desc,
-          IDempleado: IDempleado,
+          tienda: tienda,
+          sucursal: sucursal,
+          IdEmpleado: IdEmpleado,
         });
     
         console.log('Response data:', response.data);
@@ -51,7 +58,32 @@ export const App = () => {
         console.error('Error:', error);
         return { success: false, error: 'Error' };
       }
-    };    
+    };  
+    
+    const pickImage = async () => {
+      const {status} = await ImagePicker.requestCameraPermissionsAsync();
+      
+
+      if (status != 'granted'){
+        Alert.alert('error');
+      }
+      else{
+        const result = await ImagePicker.launchImageLibraryAsync();
+        if (!result.canceled){
+          setFile(result.uri);
+          setError(null);
+          console.log(result);
+          getMax();
+        }
+      }
+    }
+
+    const getMax = async () => {
+      fetch('http://localhost:5000/getMax')
+        .then(response  => response.json())
+        .then(data => console.log(data["data"][0]['']))
+        .catch(error => console.log(error));
+    }
     
 
     return (
@@ -70,10 +102,11 @@ export const App = () => {
         <Text style={styles.label}>Describe la anomalía</Text>
         <TextInput style={styles.input2} value={description} onChangeText={setDescription} multiline />
 
+        <TouchableOpacity style={styles.button} onPress={() => pickImage()}>
         <Text style={styles.label}>Agrega una imagen que apoye tu reporte</Text>
-        {/* Aquí  agregar un componente para subir imágenes */}
-
-        <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, 1)}>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, 1)}>
           <Text style={styles.buttonText}>Generar mi reporte</Text>
         </TouchableOpacity>
       </View>

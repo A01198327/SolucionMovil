@@ -5,8 +5,8 @@ const reportePost = require("../services/reportePost");
 
 router.post('/', async function (req, res, next) {
     try {
-        const { titulo, descripcion, IDempleado } = req.body;
-        const result = await reportePost.insertReporte(titulo, descripcion, IDempleado);
+        const { titulo, descripcion, tienda, sucursal, IdEmpleado } = req.body;
+        const result = await reportePost.insertReporte(titulo, descripcion, tienda, sucursal, IdEmpleado);
         res.status(201).json(result);
     } catch (err) {
         console.error(`Error: `, err.message);
