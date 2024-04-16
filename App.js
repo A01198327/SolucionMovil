@@ -233,7 +233,7 @@ export const App = () => {
       fontSize: 30,
       fontFamily: "NunitoSansBold",
       marginLeft: 0,
-      marginTop: 0,
+      marginTop: -110,
     },
     headerP: {
       fontSize: 30,
@@ -241,7 +241,7 @@ export const App = () => {
       alignSelf: 'flex-start',
       marginLeft: 0,
       marginTop: -30,
-      paddingLeft: 40,
+      paddingLeft: 25,
     },
 
     container: {
@@ -390,7 +390,7 @@ export const App = () => {
       marginBottom: 5,
       fontFamily: "Inter",
       fontSize: 20,
-      paddingLeft: 3
+      paddingLeft: 0
     },
     labelR: {
       color: 'black',
@@ -398,16 +398,16 @@ export const App = () => {
       marginTop: 20,
       marginBottom: 10,
       fontFamily: "InterBold",
-      fontSize: 20,
-      paddingLeft: 40
+      fontSize: 25,
+      paddingLeft: 27
     },
     labelP: {
       color: 'black',
       alignSelf: 'flex-start',
-      marginTop: 30,
+      marginTop: 35,
       fontFamily: "InterBold",
       fontSize: 30,
-      paddingLeft: 40
+      paddingLeft: 25
     },
     subtitleContainer: {
       alignSelf: 'flex-start',
@@ -419,9 +419,9 @@ export const App = () => {
       alignSelf: 'flex-start',
       padding: 10,
       borderRadius: 10,
-      width: 350,
+      width: 300,
       height: 90, 
-      paddingLeft: 45
+      paddingLeft: 0
     },
     grayContainer2: {
       backgroundColor: '#dbd6d6',
@@ -435,21 +435,21 @@ export const App = () => {
     grayContainerR2: {
       backgroundColor: '#dbd6d6',
       borderRadius: 10,
-      width: 365,
+      width: 350,
       height: 110 
     },
     grayContainerP: {
       backgroundColor: '#dbd6d6',
       borderRadius: 10,
       marginTop: 20,
-      width: 365,
+      width: 350,
       height: 110 
     },
     grayContainerR: {
       backgroundColor: '#dbd6d6',
       borderRadius: 10,
       marginTop: 20,
-      width: 365,
+      width: 350,
       height: 380, 
 
     },
