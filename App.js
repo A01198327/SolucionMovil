@@ -249,9 +249,18 @@ export const App = () => {
     const [password, setPassword] = useState('');
     
 
-    const handleLogin = () => {
-      console.log('Iniciando sesión');
-      navigation.navigate('Menu');
+    const handleLogin = async () => {
+      const response = await fetch(`http://localhost:5000/login?username=${username}&passkey=${password}`);
+      const data = await response.json();
+      console.log(data.data);
+      if (data.data.length > 0){
+        console.log('Iniciando sesión');
+        navigation.navigate('Menu');
+      }
+      else{
+        alert("Login not valid");
+      }
+      
     };
 
     return (
