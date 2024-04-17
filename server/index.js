@@ -6,6 +6,7 @@ const port = 5000;
 const reportesRouter = require("./routes/reportes");
 const reportesPostRouter = require("./routes/insertReportes");
 const reportesMaxRouter = require("./routes/getMax");
+const reportesUsuarioRouter = require("./routes/reportesUsuario");
 const cors = require('cors');
 
 
@@ -21,6 +22,7 @@ app.use(cors());
 app.use("/reportes", reportesRouter);
 app.use("/insertReporte", reportesPostRouter);
 app.use("/getMax", reportesMaxRouter);
+app.use("/reportesUsuario", reportesUsuarioRouter);
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   console.error(err.message, err.stack);

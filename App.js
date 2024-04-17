@@ -32,7 +32,6 @@ export const App = () => {
     SplashScreen.hideAsync();
 
   }
-
   const GenerateReportScreen = () => {
     const [title, setTitle] = useState('');
     const [store, setStore] = useState('');
@@ -100,10 +99,10 @@ export const App = () => {
         <TextInput style={styles.input} value={branch} onChangeText={setBranch} />
 
         <Text style={styles.label}>Describe la anomalía</Text>
-        <TextInput style={styles.input2} value={description} onChangeText={setDescription} multiline />
+        <TextInput style={styles.input} value={description} onChangeText={setDescription} multiline />
 
         <TouchableOpacity style={styles.button} onPress={() => pickImage()}>
-        <Text style={styles.label}>Agrega una imagen que apoye tu reporte</Text>
+        <Text style={styles.buttonText2}>Agrega una imagen que apoye tu reporte</Text>
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, 1)}>
@@ -114,16 +113,102 @@ export const App = () => {
   };
 
   const HistoryScreen = () => {
-    return <Text>Esta es la pantalla de Historial de Reportes</Text>;
+    const [pendientes, setPendientes] = useState([]);
+    const [aprobados, setAprobados] = useState([]);
+    const [rechazados, setRechazados] = useState([]);
+    const [id, setId] = useState('');
+
+
+    useEffect(() => {
+      const fetchReportes = async () => {
+        try{
+          const response = await fetch(`http://localhost:5000/reportesUsuario?IdEmpleado=1`);
+          const data = await response.json();
+          console.log(data);
+          const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
+          setPendientes(pendientesData);
+          console.log("Pendientes:", pendientesData);
+        }
+        catch (error){
+          console.log('error', error)
+        }
+      };
+      fetchReportes();
+      
+    }, [id]);
+
+    // Aquí podrías tener lógica para obtener los reportes pendientes, aprobados y rechazados desde tu base de datos o donde los almacenes.
+
+    return (
+      <View style={styles.container}>
+        <Text style={styles.header2}>Historial de Reportes</Text>
+
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.labelH}>Reportes</Text>
+          {/* Aquí funciones de los reportes pendientes */}
+          <View style={[styles.grayContainer, {height: '500px'}]}>
+          {pendientes.map((reporte, index) => (
+            <Text key={index} style={styles.title2}>
+              {reporte.Titulo}
+            </Text>
+          ))}
+          </View>
+        </View>
+        {/* 
+        
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.labelH}>Aprobados</Text>
+          <View style={styles.grayContainer}>
+          </View>
+        </View>
+
+        <View style={styles.subtitleContainer}>
+          <Text style={styles.labelH}>Rechazados</Text>
+          <View style={styles.grayContainer}>
+          </View>
+        </View>
+        */}
+        
+      </View>
+    );
   };
 
   const RankingScreen = () => {
-    return <Text>Esta es la pantalla de Ranking</Text>;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.headerR}>Top Reporters</Text>
+  
+        <View style={styles.grayContainerR}>
+          {/* Contenedor  para Top Reporters */}
+        </View>
+  
+        <Text style={styles.labelR}>Tu</Text>
+  
+        <View style={styles.grayContainerR2}>
+          {/* Contenedor  para tu reporte */}
+        </View>
+      </View>
+    );
   };
 
   const ProfileScreen = () => {
-    return <Text>Esta es la pantalla de Mi Perfil</Text>;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.headerP}>Mi perfil</Text>
+  
+        <View style={styles.grayContainerP}>
+          {/* Contenedor  para Top Reporters */}
+        </View>
+  
+        <Text style={styles.labelP}>Mis logros</Text>
+  
+        <View style={styles.grayContainerR}>
+          {/* Contenedor  para tu reporte */}
+        </View>
+      </View>
+    );
   };
+
 
   const GameScreen = () => {
     return <Text>Esta es la pantalla de Minijuego</Text>;
@@ -162,6 +247,7 @@ export const App = () => {
   const LoginScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    
 
     const handleLogin = () => {
       console.log('Iniciando sesión');
@@ -205,13 +291,33 @@ export const App = () => {
 
   const styles = StyleSheet.create({
     header: {
-      width: '100%',
-      padding: 20,
-      fontSize: 24,
+      fontSize: 30,
       fontFamily: "NunitoSansBold",
-      marginBottom: 70,
-      alignSelf: 'flex-start'
+      marginBottom: 20,
     },
+    header2: {
+      fontSize: 30,
+      fontFamily: "NunitoSansBold",
+      alignSelf: 'flex-start',
+      marginLeft: 0,
+      marginTop: -100,
+      paddingLeft: 45,
+    },
+    headerR: {
+      fontSize: 30,
+      fontFamily: "NunitoSansBold",
+      marginLeft: 0,
+      marginTop: -110,
+    },
+    headerP: {
+      fontSize: 30,
+      fontFamily: "NunitoSansBold",
+      alignSelf: 'flex-start',
+      marginLeft: 0,
+      marginTop: -30,
+      paddingLeft: 25,
+    },
+
     container: {
       flex: 1,
       justifyContent: 'center',
@@ -243,16 +349,49 @@ export const App = () => {
       width: '80%',
       fontFamily: "InterBold",
     },
-    input2: {
-      height: 15,
-      borderColor: 'gray',
+
+    inputreport: {
+      color: 'black',
+      height: 40,
+      borderColor: '#dbd6d6',
       borderWidth: 1,
       marginBottom: 10,
       paddingLeft: 8,
-      borderRadius: 20,
+      borderRadius: 0,
       width: '80%',
       fontFamily: "InterBold",
+      backgroundColor: '#dbd6d6'
     },
+
+    inputreport2: {
+      height: 100,
+      borderColor: '#dbd6d6',
+      borderWidth: 1,
+      marginBottom: 10,
+      paddingLeft: 8,
+      borderRadius: 0,
+      width: '80%',
+      fontFamily: "InterBold",
+      backgroundColor: '#dbd6d6'
+    },
+    label: {
+      color: 'black',
+      marginTop: 25,
+      fontFamily: "Inter",
+      fontSize: 18,
+      alignSelf: 'flex-start',
+      paddingLeft: 45
+    },
+
+    label2: {
+      color: 'black',
+      marginTop: 0,
+      fontFamily: "Inter",
+      fontSize: 18,
+      alignSelf: 'flex-start',
+      paddingLeft: 45
+    },
+  
     link: {
       color: 'blue',
       marginTop: 0,
@@ -262,6 +401,16 @@ export const App = () => {
       padding: 10,
       borderRadius: 15, 
       alignItems: 'center',
+      marginBottom: 20,
+      width: '80%', 
+      height: 50, 
+    },
+    buttonreport: {
+      backgroundColor: '#EDAC09', 
+      padding: 10,
+      borderRadius: 15, 
+      alignItems: 'center',
+      marginTop: 20,
       marginBottom: 20,
       width: '80%', 
       height: 50, 
@@ -284,15 +433,102 @@ export const App = () => {
       color: 'black',
       fontSize: 21,
       fontFamily: "Inter",
-      
+
     },
     footer: {
       marginTop: 0,
       backgroundColor: '#bdb7b7',
-      padding: 14,
-      color: '#fff',
+      padding: 10,
+      color: '#fff', 
+    },
+    footertext1: {
+      color: 'black',
+      fontSize: 15,
+      fontFamily: "InterBold",
+    },
+    footertext2: {
+      color: 'black',
+      fontSize: 12,
+      fontFamily: "Inter",
+    }, 
+    footertext3: {
+      color: 'black',
+      fontSize: 12,
+      fontFamily: "Inter",
+      alignItems: 'right',
+    },
+    labelH: {
+      color: 'black',
+      alignSelf: 'flex-start',
+      marginTop: 20,
+      marginBottom: 5,
+      fontFamily: "Inter",
+      fontSize: 20,
+      paddingLeft: 0
+    },
+    labelR: {
+      color: 'black',
+      alignSelf: 'flex-start',
+      marginTop: 20,
+      marginBottom: 10,
+      fontFamily: "InterBold",
+      fontSize: 25,
+      paddingLeft: 27
+    },
+    labelP: {
+      color: 'black',
+      alignSelf: 'flex-start',
+      marginTop: 35,
+      fontFamily: "InterBold",
+      fontSize: 30,
+      paddingLeft: 25
+    },
+    subtitleContainer: {
+      alignSelf: 'flex-start',
+      marginTop: 20,
+      paddingLeft: 45
+    },
+    grayContainer: {
+      backgroundColor: '#dbd6d6',
+      alignSelf: 'flex-start',
+      padding: 10,
+      borderRadius: 10,
+      width: 300,
+      height: 90, 
+      paddingLeft: 0
+    },
+    grayContainer2: {
+      backgroundColor: '#dbd6d6',
+      alignSelf: 'flex-start',
+      padding: 10,
+      borderRadius: 10,
+      width: 350,
+      height: 150, 
+      paddingLeft: 45
+    },
+    grayContainerR2: {
+      backgroundColor: '#dbd6d6',
+      borderRadius: 10,
+      width: 350,
+      height: 110 
+    },
+    grayContainerP: {
+      backgroundColor: '#dbd6d6',
+      borderRadius: 10,
+      marginTop: 20,
+      width: 350,
+      height: 110 
+    },
+    grayContainerR: {
+      backgroundColor: '#dbd6d6',
+      borderRadius: 10,
+      marginTop: 20,
+      width: 350,
+      height: 380, 
+
     },
   });
+
 
   const Stack = createStackNavigator();
 
