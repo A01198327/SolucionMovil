@@ -138,9 +138,8 @@ export const App = () => {
           console.log('error', error)
         }
       };
-      fetchReportes();
-      
-    });
+      fetchReportes()   
+    }, []);
 
     // Aquí podrías tener lógica para obtener los reportes pendientes, aprobados y rechazados desde tu base de datos o donde los almacenes.
 
@@ -179,12 +178,47 @@ export const App = () => {
   };
 
   const RankingScreen = () => {
+    const [usuarios, setUsuarios] = useState([]);
+    const { state, dispatch } = useGlobalState();
+    
+
+
+    useEffect(() => {
+      const fetchUsuarios = async () => {
+        try{
+          //console.log(state.idEmpleado);
+          const response = await fetch(`http://localhost:5000/getEmpleados`);
+          const data = await response.json();
+          console.log(data);
+          setUsuarios(data.data);        }
+        catch (error){
+          console.log('error', error)
+        }
+      };
+      fetchUsuarios()   
+    }, []);
+
     return (
       <View style={styles.container}>
         <Text style={styles.headerR}>Top Reporters</Text>
   
         <View style={styles.grayContainerR}>
-          {/* Contenedor  para Top Reporters */}
+          
+        {usuarios.map((usuario, index) => (
+          <div key={index}>
+            <div style={{width: '49%', float: 'left'}}>
+              <Text style={styles.title2}>
+                {usuario.Nombre} 
+              </Text>
+            </div>
+            <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
+              <Text style={[styles.title2]}>
+                {usuario.Puntos} 
+              </Text>
+            </div>
+          </div>
+            
+          ))}
         </View>
   
         <Text style={styles.labelR}>Tu</Text>

@@ -8,6 +8,8 @@ const reportesPostRouter = require("./routes/insertReportes");
 const reportesMaxRouter = require("./routes/getMax");
 const reportesUsuarioRouter = require("./routes/reportesUsuario");
 const loginRouter = require("./routes/loginUsuario");
+const empleadosRouter = require("./routes/getEmpleados");
+const empleadoByIdRouter = require("./routes/getEmpleadoById");
 const cors = require('cors');
 
 
@@ -25,6 +27,8 @@ app.use("/insertReporte", reportesPostRouter);
 app.use("/getMax", reportesMaxRouter);
 app.use("/reportesUsuario", reportesUsuarioRouter);
 app.use("/login", loginRouter);
+app.use("/getEmpleados", empleadosRouter);
+app.use("/getEmpleadoById", empleadoByIdRouter);
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   console.error(err.message, err.stack);
