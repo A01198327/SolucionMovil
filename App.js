@@ -9,7 +9,7 @@ import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
-
+import { GlobalStateProvider, useGlobalState } from './globalStateProvider';
 
 
 export const App = () => {
@@ -32,6 +32,8 @@ export const App = () => {
     SplashScreen.hideAsync();
 
   }
+
+
   const GenerateReportScreen = () => {
     const [title, setTitle] = useState('');
     const [store, setStore] = useState('');
@@ -39,6 +41,7 @@ export const App = () => {
     const [description, setDescription] = useState('');
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
+    const { state, dispatch } = useGlobalState();
 
     const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
@@ -105,7 +108,7 @@ export const App = () => {
         <Text style={styles.buttonText2}>Agrega una imagen que apoye tu reporte</Text>
         </TouchableOpacity>
         
-        <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, 1)}>
+        <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, state.idEmpleado)}>
           <Text style={styles.buttonText}>Generar mi reporte</Text>
         </TouchableOpacity>
       </View>
@@ -116,13 +119,15 @@ export const App = () => {
     const [pendientes, setPendientes] = useState([]);
     const [aprobados, setAprobados] = useState([]);
     const [rechazados, setRechazados] = useState([]);
-    const [id, setId] = useState('');
+    const { state, dispatch } = useGlobalState();
+    
 
 
     useEffect(() => {
       const fetchReportes = async () => {
         try{
-          const response = await fetch(`http://localhost:5000/reportesUsuario?IdEmpleado=1`);
+          console.log(state.idEmpleado);
+          const response = await fetch(`http://localhost:5000/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           console.log(data);
           const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
@@ -135,7 +140,7 @@ export const App = () => {
       };
       fetchReportes();
       
-    }, [id]);
+    });
 
     // Aquí podrías tener lógica para obtener los reportes pendientes, aprobados y rechazados desde tu base de datos o donde los almacenes.
 
@@ -244,9 +249,18 @@ export const App = () => {
     );
   };
 
+
   const LoginScreen = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [id, setId] = useState('');
+    const { state, dispatch } = useGlobalState();
+
+    const handleUpdateIdEmpleado = async (id) => {
+      dispatch({ type: 'SET_ID_EMPLEADO', payload: id });
+    };
+
+    
     
 
     const handleLogin = async () => {
@@ -254,7 +268,12 @@ export const App = () => {
       const data = await response.json();
       console.log(data.data);
       if (data.data.length > 0){
+        console.log(data.data[0].IDEmpleado)
+        setId(data.data[0].IDEmpleado);
+        console.log(id);
+        await handleUpdateIdEmpleado(data.data[0].IDEmpleado);
         console.log('Iniciando sesión');
+        console.log(state.idEmpleado);
         navigation.navigate('Menu');
       }
       else{
@@ -542,6 +561,7 @@ export const App = () => {
   const Stack = createStackNavigator();
 
   return (
+    <GlobalStateProvider>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen 
@@ -557,6 +577,7 @@ export const App = () => {
         <Stack.Screen name="Game" component={GameScreen} />
       </Stack.Navigator>
     </NavigationContainer>
+    </GlobalStateProvider>
   );
 };
 
