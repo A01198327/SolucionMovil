@@ -72,9 +72,9 @@ export const App = () => {
       else{
         const result = await ImagePicker.launchImageLibraryAsync();
         if (!result.canceled){
-          setFile(result.uri);
+          setFile(result.assets[0].uri);
           setError(null);
-          console.log(result);
+          console.log(result.assets[0].uri);
           getMax();
         }
       }
@@ -138,7 +138,8 @@ export const App = () => {
           console.log('error', error)
         }
       };
-      fetchReportes()   
+
+      fetchReportes();   
     }, []);
 
     // Aquí podrías tener lógica para obtener los reportes pendientes, aprobados y rechazados desde tu base de datos o donde los almacenes.
@@ -179,6 +180,7 @@ export const App = () => {
 
   const RankingScreen = () => {
     const [usuarios, setUsuarios] = useState([]);
+    const [perfil, setPerfil] = useState();
     const { state, dispatch } = useGlobalState();
     
 
@@ -195,7 +197,21 @@ export const App = () => {
           console.log('error', error)
         }
       };
-      fetchUsuarios()   
+
+      const getPerfil = async () =>{
+        try {
+          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const data = await response.json();
+          setPerfil(data.data);
+          console.log(perfil);
+          
+        } catch (error) {
+          console.log('error', error);
+        }
+      };
+
+      fetchUsuarios();
+      getPerfil(); 
     }, []);
 
     return (
@@ -224,19 +240,66 @@ export const App = () => {
         <Text style={styles.labelR}>Tu</Text>
   
         <View style={styles.grayContainerR2}>
-          {/* Contenedor  para tu reporte */}
+        {perfil?.map((perfil, index) => (
+          <div key={index}>
+            <div style={{width: '49%', float: 'left'}}>
+              <Text style={styles.title2}>
+                {perfil.Nombre} 
+              </Text>
+            </div>
+            <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
+              <Text style={[styles.title2]}>
+                {perfil.Puntos} 
+              </Text>
+            </div>
+          </div>
+            
+          ))}
+          
         </View>
       </View>
     );
   };
 
   const ProfileScreen = () => {
+    const { state, dispatch } = useGlobalState();
+    const [perfil, setPerfil] = useState();
+
+    useEffect(() => {
+      const getPerfil = async () =>{
+        try {
+          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const data = await response.json();
+          setPerfil(data.data);
+          
+        } catch (error) {
+          console.log('error', error);
+        }
+      };
+      getPerfil(); 
+    }, []);
+
+    
     return (
       <View style={styles.container}>
         <Text style={styles.headerP}>Mi perfil</Text>
   
         <View style={styles.grayContainerP}>
-          {/* Contenedor  para Top Reporters */}
+          {perfil?.map((perfil, index) => (
+            <div key={index}>
+              <div style={{width: '49%', float: 'left'}}>
+                <Text style={styles.title2}>
+                  {perfil.Nombre} 
+                </Text>
+              </div>
+              <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
+                <Text style={[styles.title2]}>
+                  {perfil.Puntos} 
+                </Text>
+              </div>
+            </div>
+              
+            ))}
         </View>
   
         <Text style={styles.labelP}>Mis logros</Text>
