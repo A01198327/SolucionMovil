@@ -10,6 +10,8 @@ import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
 import { GlobalStateProvider, useGlobalState } from './globalStateProvider';
+import { Platform } from 'react-native';
+
 
 
 export const App = () => {
@@ -39,9 +41,23 @@ export const App = () => {
     const [store, setStore] = useState('');
     const [branch, setBranch] = useState('');
     const [description, setDescription] = useState('');
+    const [maxReportes, setMaxReportes] = useState();
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
     const { state, dispatch } = useGlobalState();
+
+    useEffect(() => {
+      const fetchReportes = async () => {
+        try{
+          getMax();
+        }
+        catch (error){
+          console.log('error', error)
+        }
+      };
+
+      getMax();   
+    }, []);
 
     const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
@@ -63,29 +79,98 @@ export const App = () => {
     };  
     
     const pickImage = async () => {
-      const {status} = await ImagePicker.requestCameraPermissionsAsync();
-      
-
-      if (status != 'granted'){
-        Alert.alert('error');
-      }
-      else{
+      try {
         const result = await ImagePicker.launchImageLibraryAsync();
-        if (!result.canceled){
-          setFile(result.assets[0].uri);
-          setError(null);
-          console.log(result.assets[0].uri);
-          getMax();
+        if (!result.cancelled) {
+          console.log(maxReportes);
+          const formData = new FormData();
+          const localUri = result.assets[0].uri;
+          const fileName = localUri.split('/').pop();
+          const match = /\.(w+)$/.exec(fileName);
+          const type = match ? `${match[1]}` : `jpg`;
+          uploadImage(localUri, fileName);
+    
+          formData.append('file', {
+            uri: localUri,
+            name: fileName,
+            type: type
+          });
+
+          console.log(formData.get('file'));
+
+          
+        {/* await FileSystem.uploadAsync('http://localhost:5000/insertImage', localUri, {
+            httpMethod: 'POST',
+            uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+            fieldName: 'file'
+          });
+
+          const response = await fetch('http://localhost:5000/insertImage', {
+            method: 'POST',
+            body: formData,
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData);
+            getMax();
+          } else {
+            console.error('Error:', response.statusText);
+          }
+        */}
         }
+      } catch (error) {
+        console.error('Error:', error);
       }
-    }
+    };
+
+    const uploadImage = async (imageUri, filename) => {
+      try {
+          let formData = new FormData();
+          let file;
+  
+          if (Platform.OS === 'web') {
+              const response = await fetch(imageUri);
+              const blob = await response.blob();
+              file = new File([blob], `image${maxReportes + 1}.jpg`);
+          } else {
+              const fileInfo = await FileSystem.getInfoAsync(imageUri);
+              const blob = await FileSystem.readAsStringAsync(imageUri, { encoding: FileSystem.EncodingType.Base64 });
+              const fileType = fileInfo.uri.split('.').pop();
+              file = new File([blob], filename, { type: `image/${fileType}` });
+          }
+  
+          formData.append('file', file);
+  
+          const uploadResponse = await fetch('http://localhost:5000/insertImage', {
+              method: 'POST',
+              body: formData,
+          });
+  
+          if (uploadResponse.ok) {
+              const responseData = await uploadResponse.json();
+              console.log('Upload successful:', responseData);
+          } else {
+              console.error('Upload failed:', uploadResponse.statusText);
+          }
+      } catch (error) {
+          console.error('Error uploading image:', error);
+      }
+  };
+  
+
+
+    
 
     const getMax = async () => {
       fetch('http://localhost:5000/getMax')
         .then(response  => response.json())
-        .then(data => console.log(data["data"][0]['']))
+        .then(data => setMaxReportes(data["data"][0]['']))
         .catch(error => console.log(error));
-    }
+          }
     
 
     return (
