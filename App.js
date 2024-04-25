@@ -1,24 +1,12 @@
 import React, { useState } from 'react';
-<<<<<<< Updated upstream
-import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground } from 'react-native';
-=======
 import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert, Modal} from 'react-native';
->>>>>>> Stashed changes
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font';   
 import * as SplashScreen from 'expo-splash-screen'; 
 import { useEffect } from 'react';
-<<<<<<< Updated upstream
-=======
 import { TouchableHighlight } from 'react-native';
 import axios from 'axios';
-import * as ImagePicker from 'expo-image-picker';
-import * as MediaLibrary from 'expo-media-library';
-import * as FileSystem from 'expo-file-system';
-import { GlobalStateProvider, useGlobalState } from './globalStateProvider';
-
->>>>>>> Stashed changes
 
 export const App = () => {
   const [fontsLoaded] = useFonts({
@@ -40,27 +28,20 @@ export const App = () => {
     SplashScreen.hideAsync();
   }
 
-<<<<<<< Updated upstream
-=======
   const stores = ['Liverpool', 'Sears', 'Coppel', 'Sanborns']; 
 
   const branches = ['San Geronimo', 'Paseo la Fe', 'Esfera', 'Nuevo Sur']
 
->>>>>>> Stashed changes
   const GenerateReportScreen = () => {
     const [title, setTitle] = useState('');
     const [store, setStore] = useState('Seleccione la tienda');
     const [branch, setBranch] = useState('Seleccione la sucursal');
     const [description, setDescription] = useState('');
-<<<<<<< Updated upstream
-=======
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
-    const { state, dispatch } = useGlobalState();
     const [modalVisibleStore, setModalVisibleStore] = useState(false);
     const [modalVisibleBranch, setModalVisibleBranch] = useState(false);
     
->>>>>>> Stashed changes
 
     const handleGenerateReport = () => {
       console.log('Generar reporte');
@@ -74,21 +55,6 @@ export const App = () => {
         <Text style={styles.label}>Título (Descripción breve)</Text>
         <TextInput style={styles.inputreport} value={title} onChangeText={setTitle} />
 
-<<<<<<< Updated upstream
-        <Text style={styles.label2}>Tienda</Text>
-        <TextInput style={styles.inputreport} value={store} onChangeText={setStore} />
-
-        <Text style={styles.label2}>Sucursal</Text>
-        <TextInput style={styles.inputreport} value={branch} onChangeText={setBranch} />
-
-        <Text style={styles.label2}>Describe la anomalía</Text>
-        <TextInput style={styles.inputreport2} value={description} onChangeText={setDescription} multiline />
-
-        <Text style={styles.label2}>Agrega una imagen que apoye tu reporte</Text>
-        {/* Aquí  agregar un componente para subir imágenes */}
-
-        <TouchableOpacity style={styles.buttonreport} onPress={handleGenerateReport}>
-=======
         <Text style={styles.label}>Tienda</Text>
         <Modal
   animationType="slide"
@@ -200,7 +166,6 @@ export const App = () => {
         </TouchableOpacity>
         
         <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, 1)}>
->>>>>>> Stashed changes
           <Text style={styles.buttonText}>Generar mi reporte</Text>
         </TouchableOpacity>
       </View>
@@ -211,16 +176,12 @@ export const App = () => {
     const [pendientes, setPendientes] = useState([]);
     const [aprobados, setAprobados] = useState([]);
     const [rechazados, setRechazados] = useState([]);
-<<<<<<< Updated upstream
-=======
-    const { state, dispatch } = useGlobalState();
     
 
 
     useEffect(() => {
       const fetchReportes = async () => {
         try{
-          console.log(state.idEmpleado);
           const response = await fetch(`http://localhost:5000/reportesUsuario?IdEmpleado= 1`);
           const data = await response.json();
           console.log(data);
@@ -235,7 +196,6 @@ export const App = () => {
 
       fetchReportes();   
     }, []);
->>>>>>> Stashed changes
 
     // Aquí podrías tener lógica para obtener los reportes pendientes, aprobados y rechazados desde tu base de datos o donde los almacenes.
 
@@ -271,18 +231,14 @@ export const App = () => {
   };
 
   const RankingScreen = () => {
-<<<<<<< Updated upstream
-=======
     const [usuarios, setUsuarios] = useState([]);
     const [perfil, setPerfil] = useState();
-    const { state, dispatch } = useGlobalState();
     
 
 
     useEffect(() => {
       const fetchUsuarios = async () => {
         try{
-          //console.log(state.idEmpleado);
           const response = await fetch(`http://localhost:5000/getEmpleados`);
           const data = await response.json();
           console.log(data);
@@ -308,7 +264,6 @@ export const App = () => {
       getPerfil(); 
     }, []);
 
->>>>>>> Stashed changes
     return (
       <View style={styles.container}>
         <Text style={styles.headerR}>Top Reporters</Text>
@@ -327,9 +282,6 @@ export const App = () => {
   };
 
   const ProfileScreen = () => {
-<<<<<<< Updated upstream
-=======
-    const { state, dispatch } = useGlobalState();
     const [perfil, setPerfil] = useState();
 
     useEffect(() => {
@@ -347,7 +299,6 @@ export const App = () => {
     }, []);
 
     
->>>>>>> Stashed changes
     return (
       <View style={styles.container}>
         <Text style={styles.headerP}>Mi perfil</Text>
