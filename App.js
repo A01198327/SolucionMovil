@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
+<<<<<<< Updated upstream
 import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground } from 'react-native';
+=======
+import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert, Modal} from 'react-native';
+>>>>>>> Stashed changes
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useFonts } from 'expo-font'; 
+import { useFonts } from 'expo-font';   
 import * as SplashScreen from 'expo-splash-screen'; 
 import { useEffect } from 'react';
+<<<<<<< Updated upstream
+=======
+import { TouchableHighlight } from 'react-native';
+import axios from 'axios';
+import * as ImagePicker from 'expo-image-picker';
+import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from 'expo-file-system';
+import { GlobalStateProvider, useGlobalState } from './globalStateProvider';
+
+>>>>>>> Stashed changes
 
 export const App = () => {
   const [fontsLoaded] = useFonts({
@@ -26,11 +40,27 @@ export const App = () => {
     SplashScreen.hideAsync();
   }
 
+<<<<<<< Updated upstream
+=======
+  const stores = ['Liverpool', 'Sears', 'Coppel', 'Sanborns']; 
+
+  const branches = ['San Geronimo', 'Paseo la Fe', 'Esfera', 'Nuevo Sur']
+
+>>>>>>> Stashed changes
   const GenerateReportScreen = () => {
     const [title, setTitle] = useState('');
-    const [store, setStore] = useState('');
-    const [branch, setBranch] = useState('');
+    const [store, setStore] = useState('Seleccione la tienda');
+    const [branch, setBranch] = useState('Seleccione la sucursal');
     const [description, setDescription] = useState('');
+<<<<<<< Updated upstream
+=======
+    const [file, setFile] = useState(null);
+    const [error, setError] = useState(null);
+    const { state, dispatch } = useGlobalState();
+    const [modalVisibleStore, setModalVisibleStore] = useState(false);
+    const [modalVisibleBranch, setModalVisibleBranch] = useState(false);
+    
+>>>>>>> Stashed changes
 
     const handleGenerateReport = () => {
       console.log('Generar reporte');
@@ -44,6 +74,7 @@ export const App = () => {
         <Text style={styles.label}>Título (Descripción breve)</Text>
         <TextInput style={styles.inputreport} value={title} onChangeText={setTitle} />
 
+<<<<<<< Updated upstream
         <Text style={styles.label2}>Tienda</Text>
         <TextInput style={styles.inputreport} value={store} onChangeText={setStore} />
 
@@ -57,6 +88,119 @@ export const App = () => {
         {/* Aquí  agregar un componente para subir imágenes */}
 
         <TouchableOpacity style={styles.buttonreport} onPress={handleGenerateReport}>
+=======
+        <Text style={styles.label}>Tienda</Text>
+        <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisibleStore}
+  onRequestClose={() => {
+    setModalVisibleStore(!modalVisibleStore);
+  }}
+>
+  <View style={{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  }}>
+    <View style={{
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    }}>
+      {stores.map((store, index) => (
+        <TouchableHighlight
+          key={index}
+          onPress={() => {
+            setStore(store);
+            setModalVisibleStore(!modalVisibleStore);
+          }}
+        >
+          <Text style={{fontSize: 20, marginBottom: 20,}}>{store}</Text>
+        </TouchableHighlight>
+      ))}
+    </View>
+  </View>
+</Modal>
+
+<TouchableOpacity 
+  style={styles.inputb} 
+  onPress={() => setModalVisibleStore(true)}
+>
+  <Text style={{fontSize: 20}}>{store}</Text>
+</TouchableOpacity>
+
+      <Text style={styles.label}>Sucursal</Text>
+      <Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisibleBranch}
+  onRequestClose={() => {
+    setModalVisibleBranch(!modalVisibleBranch);
+  }}
+>
+  <View style={{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  }}>
+    <View style={{
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    }}>
+      {branches.map((branch, index) => (
+        <TouchableHighlight
+          key={index}
+          onPress={() => {
+            setBranch(branch);
+            setModalVisibleBranch(!modalVisibleBranch);
+          }}
+        >
+          <Text style={{fontSize: 20, marginBottom: 20}}>{branch}</Text>
+        </TouchableHighlight>
+      ))}
+    </View>
+  </View>
+</Modal>
+<TouchableOpacity 
+  style={styles.inputb} 
+  onPress={() => setModalVisibleBranch(true)}
+>
+  <Text style={{fontSize: 20}}>{branch}</Text>
+</TouchableOpacity>
+
+        <Text style={styles.label}>Describe la anomalía</Text>
+        <TextInput style={styles.input} value={description} onChangeText={setDescription}/>
+
+        <TouchableOpacity style={styles.button2} onPress={() => pickImage()}>
+        <Text style={styles.buttonText2}>Agrega una imagen</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, 1)}>
+>>>>>>> Stashed changes
           <Text style={styles.buttonText}>Generar mi reporte</Text>
         </TouchableOpacity>
       </View>
@@ -67,6 +211,31 @@ export const App = () => {
     const [pendientes, setPendientes] = useState([]);
     const [aprobados, setAprobados] = useState([]);
     const [rechazados, setRechazados] = useState([]);
+<<<<<<< Updated upstream
+=======
+    const { state, dispatch } = useGlobalState();
+    
+
+
+    useEffect(() => {
+      const fetchReportes = async () => {
+        try{
+          console.log(state.idEmpleado);
+          const response = await fetch(`http://localhost:5000/reportesUsuario?IdEmpleado= 1`);
+          const data = await response.json();
+          console.log(data);
+          const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
+          setPendientes(pendientesData);
+          console.log("Pendientes:", pendientesData);
+        }
+        catch (error){
+          console.log('error', error)
+        }
+      };
+
+      fetchReportes();   
+    }, []);
+>>>>>>> Stashed changes
 
     // Aquí podrías tener lógica para obtener los reportes pendientes, aprobados y rechazados desde tu base de datos o donde los almacenes.
 
@@ -102,6 +271,44 @@ export const App = () => {
   };
 
   const RankingScreen = () => {
+<<<<<<< Updated upstream
+=======
+    const [usuarios, setUsuarios] = useState([]);
+    const [perfil, setPerfil] = useState();
+    const { state, dispatch } = useGlobalState();
+    
+
+
+    useEffect(() => {
+      const fetchUsuarios = async () => {
+        try{
+          //console.log(state.idEmpleado);
+          const response = await fetch(`http://localhost:5000/getEmpleados`);
+          const data = await response.json();
+          console.log(data);
+          setUsuarios(data.data);        }
+        catch (error){
+          console.log('error', error)
+        }
+      };
+
+      const getPerfil = async () =>{
+        try {
+          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado= 1`);
+          const data = await response.json();
+          setPerfil(data.data);
+          console.log(perfil);
+          
+        } catch (error) {
+          console.log('error', error);
+        }
+      };
+
+      fetchUsuarios();
+      getPerfil(); 
+    }, []);
+
+>>>>>>> Stashed changes
     return (
       <View style={styles.container}>
         <Text style={styles.headerR}>Top Reporters</Text>
@@ -120,6 +327,27 @@ export const App = () => {
   };
 
   const ProfileScreen = () => {
+<<<<<<< Updated upstream
+=======
+    const { state, dispatch } = useGlobalState();
+    const [perfil, setPerfil] = useState();
+
+    useEffect(() => {
+      const getPerfil = async () =>{
+        try {
+          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado=1`);
+          const data = await response.json();
+          setPerfil(data.data);
+          
+        } catch (error) {
+          console.log('error', error);
+        }
+      };
+      getPerfil(); 
+    }, []);
+
+    
+>>>>>>> Stashed changes
     return (
       <View style={styles.container}>
         <Text style={styles.headerP}>Mi perfil</Text>
@@ -274,8 +502,21 @@ export const App = () => {
       borderRadius: 20,
       width: '80%',
       fontFamily: "InterBold",
+      marginTop: 10,
     },
-
+    inputb: {
+      color: 'black',
+      height: 35,
+      borderColor: 'gray',
+      borderWidth: 1,
+      marginBottom: 10,
+      paddingLeft: 8,
+      borderRadius: 20,
+      width: '80%',
+      fontFamily: "InterBold",
+      alignItems: 'center',
+      marginTop: 10,
+    },
     inputreport: {
       color: 'black',
       height: 40,
@@ -331,6 +572,18 @@ export const App = () => {
       width: '80%', 
       height: 50, 
     },
+
+    button2: {
+      backgroundColor: '#dbd6d6', 
+      padding: 10,
+      borderRadius: 15, 
+      alignItems: 'center',
+      marginBottom: 20,
+      width: '80%', 
+      height: 50, 
+      marginTop: 15,
+    },
+
     buttonreport: {
       backgroundColor: '#EDAC09', 
       padding: 10,
@@ -357,9 +610,8 @@ export const App = () => {
     },
     buttonText2: {
       color: 'black',
-      fontSize: 21,
-      fontFamily: "Inter",
-
+      fontSize: 22,
+      fontFamily: "InterBold",
     },
     footer: {
       marginTop: 0,
