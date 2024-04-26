@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert } from 'react-native';
+import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert, Modal } from 'react-native';
+import { TouchableHighlight } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useFonts } from 'expo-font'; 
@@ -34,6 +35,9 @@ export const App = () => {
     SplashScreen.hideAsync();
 
   }
+  const stores = ['Liverpool', 'Sears', 'Coppel', 'Sanborns']; 
+
+  const branches = ['San Geronimo', 'Paseo la Fe', 'Esfera', 'Nuevo Sur']
 
 
   const GenerateReportScreen = () => {
@@ -42,6 +46,8 @@ export const App = () => {
     const [branch, setBranch] = useState('');
     const [description, setDescription] = useState('');
     const [maxReportes, setMaxReportes] = useState();
+    const [modalVisibleStore, setModalVisibleStore] = useState(false);
+    const [modalVisibleBranch, setModalVisibleBranch] = useState(false);
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
     const { state, dispatch } = useGlobalState();
@@ -62,7 +68,7 @@ export const App = () => {
     const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
       try {
-        const response = await axios.post('http://localhost:5000/insertReporte', {
+        const response = await axios.post(`http://${state.direccion}:${state.puerto}/insertReporte`, {
           titulo: titulo,
           descripcion: desc,
           tienda: tienda,
@@ -89,37 +95,12 @@ export const App = () => {
           const match = /\.(w+)$/.exec(fileName);
           const type = match ? `${match[1]}` : `jpg`;
           uploadImage(localUri, fileName);
-    
-          formData.append('file', {
-            uri: localUri,
-            name: fileName,
-            type: type
-          });
-
-          console.log(formData.get('file'));
-
-          
-        {/* await FileSystem.uploadAsync('http://localhost:5000/insertImage', localUri, {
+                
+        {/* await FileSystem.uploadAsync('http://${state.direccion}:${state.puerto}/insertImage', localUri, {
             httpMethod: 'POST',
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
             fieldName: 'file'
           });
-
-          const response = await fetch('http://localhost:5000/insertImage', {
-            method: 'POST',
-            body: formData,
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          if (response.ok) {
-            const responseData = await response.json();
-            console.log(responseData);
-            getMax();
-          } else {
-            console.error('Error:', response.statusText);
-          }
         */}
         }
       } catch (error) {
@@ -145,7 +126,7 @@ export const App = () => {
   
           formData.append('file', file);
   
-          const uploadResponse = await fetch('http://localhost:5000/insertImage', {
+          const uploadResponse = await fetch(`http://${state.direccion}:${state.puerto}/insertImage`, {
               method: 'POST',
               body: formData,
           });
@@ -166,39 +147,136 @@ export const App = () => {
     
 
     const getMax = async () => {
-      fetch('http://localhost:5000/getMax')
+      fetch(`http://${state.direccion}:${state.puerto}/getMax`)
         .then(response  => response.json())
         .then(data => setMaxReportes(data["data"][0]['']))
         .catch(error => console.log(error));
           }
     
 
-    return (
-      <View style={styles.container}>
-        <Text style={styles.header}>Genera tu reporte</Text>
-        
-        <Text style={styles.label}>Título (Descripción breve)</Text>
-        <TextInput style={styles.input} value={title} onChangeText={setTitle} />
-
-        <Text style={styles.label}>Tienda</Text>
-        <TextInput style={styles.input} value={store} onChangeText={setStore} />
-
-        <Text style={styles.label}>Sucursal</Text>
-        <TextInput style={styles.input} value={branch} onChangeText={setBranch} />
-
-        <Text style={styles.label}>Describe la anomalía</Text>
-        <TextInput style={styles.input} value={description} onChangeText={setDescription} multiline />
-
-        <TouchableOpacity style={styles.button} onPress={() => pickImage()}>
-        <Text style={styles.buttonText2}>Agrega una imagen que apoye tu reporte</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, state.idEmpleado)}>
-          <Text style={styles.buttonText}>Generar mi reporte</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+          return (
+            <View style={styles.container}>
+              <Text style={styles.header2}>Genera tu reporte</Text>
+              
+              <Text style={styles.label}>Título (Descripción breve)</Text>
+              <TextInput style={styles.inputreport} value={title} onChangeText={setTitle} />
+      
+              <Text style={styles.label}>Tienda</Text>
+              <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleStore}
+        onRequestClose={() => {
+          setModalVisibleStore(!modalVisibleStore);
+        }}
+      >
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 22,
+        }}>
+          <View style={{
+            margin: 20,
+            backgroundColor: "white",
+            borderRadius: 20,
+            padding: 35,
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5
+          }}>
+            {stores.map((store, index) => (
+              <TouchableHighlight
+                key={index}
+                onPress={() => {
+                  setStore(store);
+                  setModalVisibleStore(!modalVisibleStore);
+                }}
+              >
+                <Text style={{fontSize: 20, marginBottom: 20,}}>{store}</Text>
+              </TouchableHighlight>
+            ))}
+          </View>
+        </View>
+      </Modal>
+      
+      <TouchableOpacity 
+        style={styles.inputb} 
+        onPress={() => setModalVisibleStore(true)}
+      >
+        <Text style={{fontSize: 20}}>{store}</Text>
+      </TouchableOpacity>
+      
+            <Text style={styles.label}>Sucursal</Text>
+            <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleBranch}
+        onRequestClose={() => {
+          setModalVisibleBranch(!modalVisibleBranch);
+        }}
+      >
+        <View style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: 22,
+        }}>
+          <View style={{
+            margin: 20,
+            backgroundColor: "white",
+            borderRadius: 20,
+            padding: 35,
+            alignItems: "center",
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 2
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5
+          }}>
+            {branches.map((branch, index) => (
+              <TouchableHighlight
+                key={index}
+                onPress={() => {
+                  setBranch(branch);
+                  setModalVisibleBranch(!modalVisibleBranch);
+                }}
+              >
+                <Text style={{fontSize: 20, marginBottom: 20}}>{branch}</Text>
+              </TouchableHighlight>
+            ))}
+          </View>
+        </View>
+      </Modal>
+      <TouchableOpacity 
+        style={styles.inputb} 
+        onPress={() => setModalVisibleBranch(true)}
+      >
+        <Text style={{fontSize: 20}}>{branch}</Text>
+      </TouchableOpacity>
+      
+              <Text style={styles.label}>Describe la anomalía</Text>
+              <TextInput style={styles.input} value={description} onChangeText={setDescription}/>
+      
+              <TouchableOpacity style={styles.button2} onPress={() => pickImage()}>
+              <Text style={styles.buttonText2}>Agrega una imagen</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.button} onPress={() => handleGenerateReport(title, description, store, branch, 1)}>
+                <Text style={styles.buttonText}>Generar mi reporte</Text>
+              </TouchableOpacity>
+            </View>
+          );
+        };
 
   const HistoryScreen = () => {
     const [pendientes, setPendientes] = useState([]);
@@ -212,7 +290,7 @@ export const App = () => {
       const fetchReportes = async () => {
         try{
           console.log(state.idEmpleado);
-          const response = await fetch(`http://localhost:5000/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`http://${state.direccion}:${state.puerto}/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           console.log(data);
           const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
@@ -274,7 +352,7 @@ export const App = () => {
       const fetchUsuarios = async () => {
         try{
           //console.log(state.idEmpleado);
-          const response = await fetch(`http://localhost:5000/getEmpleados`);
+          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleados`);
           const data = await response.json();
           console.log(data);
           setUsuarios(data.data);        }
@@ -285,7 +363,7 @@ export const App = () => {
 
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           console.log(perfil);
@@ -353,7 +431,7 @@ export const App = () => {
     useEffect(() => {
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           
@@ -446,22 +524,12 @@ export const App = () => {
     
 
     const handleLogin = async () => {
-      const response = await fetch(`http://localhost:5000/login?username=${username}&passkey=${password}`);
-      const data = await response.json();
-      console.log(data.data);
-      if (data.data.length > 0){
-        console.log(data.data[0].IDEmpleado)
-        setId(data.data[0].IDEmpleado);
-        console.log(id);
-        await handleUpdateIdEmpleado(data.data[0].IDEmpleado);
+        await handleUpdateIdEmpleado(1);
         console.log('Iniciando sesión');
         console.log(state.idEmpleado);
-        navigation.navigate('Menu');
-      }
-      else{
-        alert("Login not valid");
-      }
-      
+        console.log(state.direccion);
+        console.log(state.puerto);
+        navigation.navigate('Menu');      
     };
 
     return (
