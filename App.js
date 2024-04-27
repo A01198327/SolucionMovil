@@ -629,6 +629,20 @@ export const App = () => {
       fontFamily: "InterBold",
     },
 
+    inputb: {
+      color: 'black',
+      height: 35,
+      borderColor: 'gray',
+      borderWidth: 1,
+      marginBottom: 10,
+      paddingLeft: 8,
+      borderRadius: 20,
+      width: '80%',
+      fontFamily: "InterBold",
+      alignItems: 'center',
+      marginTop: 10,
+    },
+
     inputreport: {
       color: 'black',
       height: 40,
@@ -684,6 +698,19 @@ export const App = () => {
       width: '80%', 
       height: 50, 
     },
+
+
+ button2: {
+  backgroundColor: '#dbd6d6', 
+  padding: 10,
+  borderRadius: 15, 
+  alignItems: 'center',
+  marginBottom: 20,
+  width: '80%', 
+  height: 50, 
+  marginTop: 15,
+},
+
     buttonreport: {
       backgroundColor: '#EDAC09', 
       padding: 10,
