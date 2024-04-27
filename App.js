@@ -53,7 +53,7 @@ export const App = () => {
         <Text style={styles.header2}>Genera tu reporte</Text>
         
         <Text style={styles.label}>Título (Descripción breve)</Text>
-        <TextInput style={styles.inputreport} value={title} onChangeText={setTitle} />
+        <TextInput style={styles.input} value={title} onChangeText={setTitle} />
 
         <Text style={styles.label}>Tienda</Text>
         <Modal
@@ -182,7 +182,7 @@ export const App = () => {
     useEffect(() => {
       const fetchReportes = async () => {
         try{
-          const response = await fetch(`http://localhost:5000/reportesUsuario?IdEmpleado= 1`);
+          const response = await fetch(`http://localhost:5500/reportesUsuario?IdEmpleado= 1`);
           const data = await response.json();
           console.log(data);
           const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
@@ -239,7 +239,7 @@ export const App = () => {
     useEffect(() => {
       const fetchUsuarios = async () => {
         try{
-          const response = await fetch(`http://localhost:5000/getEmpleados`);
+          const response = await fetch(`http://localhost:5500/getEmpleados`);
           const data = await response.json();
           console.log(data);
           setUsuarios(data.data);        }
@@ -250,7 +250,7 @@ export const App = () => {
 
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado= 1`);
+          const response = await fetch(`http://localhost:5500/getEmpleadoById?IdEmpleado= 1`);
           const data = await response.json();
           setPerfil(data.data);
           console.log(perfil);
@@ -287,7 +287,7 @@ export const App = () => {
     useEffect(() => {
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://localhost:5000/getEmpleadoById?IdEmpleado=1`);
+          const response = await fetch(`http://localhost:5500/getEmpleadoById?IdEmpleado=1`);
           const data = await response.json();
           setPerfil(data.data);
           
