@@ -9,6 +9,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
+import * as WebBrowser from 'expo-web-browser';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
 import { GlobalStateProvider, useGlobalState } from './globalStateProvider';
@@ -50,6 +51,7 @@ export const App = () => {
     const [modalVisibleBranch, setModalVisibleBranch] = useState(false);
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
+    const [maxReportes, setMaxReportes] = useState(null);
     const { state, dispatch } = useGlobalState();
 
     useEffect(() => {
@@ -88,6 +90,7 @@ export const App = () => {
     
     const pickImage = async () => {
       try {
+        getMax();
         const result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
           console.log(maxReportes);
@@ -119,26 +122,28 @@ export const App = () => {
               const response = await fetch(imageUri);
               const blob = await response.blob();
               file = new File([blob], `image${maxReportes + 1}.jpg`);
-          } else {
-              const fileInfo = await FileSystem.getInfoAsync(imageUri);
-              const blob = await FileSystem.readAsStringAsync(imageUri, { encoding: FileSystem.EncodingType.Base64 });
-              const fileType = fileInfo.uri.split('.').pop();
-              file = new File([blob], filename, { type: `image/${fileType}` });
-          }
-  
-          formData.append('file', file);
-  
-          const uploadResponse = await fetch(`${state.direccion}/insertImage`, {
-              method: 'POST',
-              body: formData,
+              formData.append('file', file);
+              const uploadResponse = await fetch(`${state.direccion}/insertImage`, {
+                  method: 'POST',
+                  body: formData,
           });
-  
           if (uploadResponse.ok) {
-              const responseData = await uploadResponse.json();
-              console.log('Upload successful:', responseData);
+            const responseData = await uploadResponse.json();
+            console.log('Upload successful:', responseData);
+        } else {
+            console.error('Upload failed:', uploadResponse.statusText);
+        }
+  
           } else {
-              console.error('Upload failed:', uploadResponse.statusText);
+              await FileSystem.uploadAsync(`${state.direccion}/insertImage`, imageUri, {
+                httpMethod: 'POST',
+                uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+                fieldName: 'file'
+              });
           }
+  
+          
+          
       } catch (error) {
           console.error('Error uploading image:', error);
       }
@@ -384,43 +389,39 @@ export const App = () => {
         <Text style={styles.headerR}>Top Reporters</Text>
   
         <View style={styles.grayContainerR}>
-          
-        {usuarios.map((usuario, index) => (
-          <div key={index}>
-            <div style={{width: '49%', float: 'left'}}>
-              <Text style={styles.title2}>
-                {usuario.Nombre} 
-              </Text>
-            </div>
-            <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
-              <Text style={[styles.title2]}>
-                {usuario.Puntos} 
-              </Text>
-            </div>
-          </div>
-            
+          {usuarios.map((usuario, index) => (
+            <View key={index} style={{ flexDirection: 'row' }}>
+              <View style={{ width: '49%' }}>
+                <Text style={styles.title2}>
+                  {usuario.Nombre}
+                </Text>
+              </View>
+              <View style={{ width: '49%', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.title2}>
+                  {usuario.Puntos}
+                </Text>
+              </View>
+            </View>
           ))}
         </View>
   
         <Text style={styles.labelR}>Tu</Text>
   
         <View style={styles.grayContainerR2}>
-        {perfil?.map((perfil, index) => (
-          <div key={index}>
-            <div style={{width: '49%', float: 'left'}}>
-              <Text style={styles.title2}>
-                {perfil.Nombre} 
-              </Text>
-            </div>
-            <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
-              <Text style={[styles.title2]}>
-                {perfil.Puntos} 
-              </Text>
-            </div>
-          </div>
-            
+          {perfil?.map((perfil, index) => (
+            <View key={index} style={{ flexDirection: 'row' }}>
+              <View style={{ width: '49%' }}>
+                <Text style={styles.title2}>
+                  {perfil.Nombre}
+                </Text>
+              </View>
+              <View style={{ width: '49%', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.title2}>
+                  {perfil.Puntos}
+                </Text>
+              </View>
+            </View>
           ))}
-          
         </View>
       </View>
     );
@@ -451,20 +452,15 @@ export const App = () => {
   
         <View style={styles.grayContainerP}>
           {perfil?.map((perfil, index) => (
-            <div key={index}>
-              <div style={{width: '49%', float: 'left'}}>
-                <Text style={styles.title2}>
-                  {perfil.Nombre} 
-                </Text>
-              </div>
-              <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
-                <Text style={[styles.title2]}>
-                  {perfil.Puntos} 
-                </Text>
-              </div>
-            </div>
-              
-            ))}
+            <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.title2}>
+                {perfil.Nombre}
+              </Text>
+              <Text style={styles.title2}>
+                {perfil.Puntos}
+              </Text>
+            </View>
+          ))}
         </View>
   
         <Text style={styles.labelP}>Mis logros</Text>
@@ -483,27 +479,9 @@ export const App = () => {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Peak Gaming</Text>
-        <View style={styles.webViewContainer}>
-        <WebView
-          scalesPageToFit={true}
-          bounces={false}
-          javaScriptEnabled
-          style={{ height: 500, width: 300 }}
-          source={{
-            html: `
-            <iframe
-              title="Unity WebGL Game"
-              src={unityHTMLUrl}
-              width="100%"
-              height="100%"
-              style={{ transform: 'rotate(90deg)' }}
-              allowFullScreen
-            ></iframe>
-            `,
-          }}
-          automaticallyAdjustContentInsets={false}
-        />
-        </View>
+        <TouchableOpacity style={styles.button} onPress={async () => WebBrowser.openBrowserAsync(unityHTMLUrl)}>
+                <Text style={styles.buttonText}>Abrir el Juego</Text>
+        </TouchableOpacity>
       </View>
     );
   };
