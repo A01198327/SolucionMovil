@@ -68,7 +68,7 @@ export const App = () => {
     const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
       try {
-        const response = await axios.post(`https://${state.direccion}:${state.puerto}/insertReporte`, {
+        const response = await axios.post(`${state.direccion}/insertReporte`, {
           titulo: titulo,
           descripcion: desc,
           tienda: tienda,
@@ -98,7 +98,7 @@ export const App = () => {
           const type = match ? `${match[1]}` : `jpg`;
           uploadImage(localUri, fileName);
                 
-        {/* await FileSystem.uploadAsync('https://${state.direccion}:${state.puerto}/insertImage', localUri, {
+        {/* await FileSystem.uploadAsync('${state.direccion}/insertImage', localUri, {
             httpMethod: 'POST',
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
             fieldName: 'file'
@@ -128,7 +128,7 @@ export const App = () => {
   
           formData.append('file', file);
   
-          const uploadResponse = await fetch(`https://${state.direccion}:${state.puerto}/insertImage`, {
+          const uploadResponse = await fetch(`${state.direccion}/insertImage`, {
               method: 'POST',
               body: formData,
           });
@@ -149,7 +149,7 @@ export const App = () => {
     
 
     const getMax = async () => {
-      fetch(`https://${state.direccion}:${state.puerto}/getMax`)
+      fetch(`${state.direccion}/getMax`)
         .then(response  => response.json())
         .then(data => setMaxReportes(data["data"][0]['']))
         .catch(error => console.log(error));
@@ -292,7 +292,7 @@ export const App = () => {
       const fetchReportes = async () => {
         try{
           console.log(state.idEmpleado);
-          const response = await fetch(`https://${state.direccion}:${state.puerto}/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`${state.direccion}/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           console.log(data);
           const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
@@ -354,7 +354,7 @@ export const App = () => {
       const fetchUsuarios = async () => {
         try{
           //console.log(state.idEmpleado);
-          const response = await fetch(`https://${state.direccion}:${state.puerto}/getEmpleados`);
+          const response = await fetch(`${state.direccion}/getEmpleados`);
           const data = await response.json();
           console.log(data);
           setUsuarios(data.data);        }
@@ -365,7 +365,7 @@ export const App = () => {
 
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`https://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`${state.direccion}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           console.log(perfil);
@@ -433,7 +433,7 @@ export const App = () => {
     useEffect(() => {
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`https://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`${state.direccion}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           
@@ -479,7 +479,7 @@ export const App = () => {
 
   const GameScreen = () => {
     const { state, dispatch } = useGlobalState();
-    const unityHTMLUrl = `https://${state.direccion}:${state.puerto}/game/index.html`;
+    const unityHTMLUrl = `${state.direccion}/game/index.html`;
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Peak Gaming</Text>
