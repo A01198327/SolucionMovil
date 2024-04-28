@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert, Modal } from 'react-native';
+import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert, Modal} from 'react-native';
 import { TouchableHighlight } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { WebView } from 'react-native-webview';
 import { useFonts } from 'expo-font'; 
 import * as SplashScreen from 'expo-splash-screen'; 
 import { useEffect } from 'react';
@@ -67,7 +68,7 @@ export const App = () => {
     const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
       try {
-        const response = await axios.post(`http://${state.direccion}:${state.puerto}/insertReporte`, {
+        const response = await axios.post(`https://${state.direccion}:${state.puerto}/insertReporte`, {
           titulo: titulo,
           descripcion: desc,
           tienda: tienda,
@@ -97,7 +98,7 @@ export const App = () => {
           const type = match ? `${match[1]}` : `jpg`;
           uploadImage(localUri, fileName);
                 
-        {/* await FileSystem.uploadAsync('http://${state.direccion}:${state.puerto}/insertImage', localUri, {
+        {/* await FileSystem.uploadAsync('https://${state.direccion}:${state.puerto}/insertImage', localUri, {
             httpMethod: 'POST',
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
             fieldName: 'file'
@@ -127,7 +128,7 @@ export const App = () => {
   
           formData.append('file', file);
   
-          const uploadResponse = await fetch(`http://${state.direccion}:${state.puerto}/insertImage`, {
+          const uploadResponse = await fetch(`https://${state.direccion}:${state.puerto}/insertImage`, {
               method: 'POST',
               body: formData,
           });
@@ -148,7 +149,7 @@ export const App = () => {
     
 
     const getMax = async () => {
-      fetch(`http://${state.direccion}:${state.puerto}/getMax`)
+      fetch(`https://${state.direccion}:${state.puerto}/getMax`)
         .then(response  => response.json())
         .then(data => setMaxReportes(data["data"][0]['']))
         .catch(error => console.log(error));
@@ -291,7 +292,7 @@ export const App = () => {
       const fetchReportes = async () => {
         try{
           console.log(state.idEmpleado);
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`https://${state.direccion}:${state.puerto}/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           console.log(data);
           const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
@@ -353,7 +354,7 @@ export const App = () => {
       const fetchUsuarios = async () => {
         try{
           //console.log(state.idEmpleado);
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleados`);
+          const response = await fetch(`https://${state.direccion}:${state.puerto}/getEmpleados`);
           const data = await response.json();
           console.log(data);
           setUsuarios(data.data);        }
@@ -364,7 +365,7 @@ export const App = () => {
 
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`https://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           console.log(perfil);
@@ -432,7 +433,7 @@ export const App = () => {
     useEffect(() => {
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`https://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           
@@ -477,7 +478,34 @@ export const App = () => {
 
 
   const GameScreen = () => {
-    return <Text>Esta es la pantalla de Minijuego</Text>;
+    const { state, dispatch } = useGlobalState();
+    const unityHTMLUrl = `https://${state.direccion}:${state.puerto}/game/index.html`;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Peak Gaming</Text>
+        <View style={styles.webViewContainer}>
+        <WebView
+          scalesPageToFit={true}
+          bounces={false}
+          javaScriptEnabled
+          style={{ height: 500, width: 300 }}
+          source={{
+            html: `
+            <iframe
+              title="Unity WebGL Game"
+              src={unityHTMLUrl}
+              width="100%"
+              height="100%"
+              style={{ transform: 'rotate(90deg)' }}
+              allowFullScreen
+            ></iframe>
+            `,
+          }}
+          automaticallyAdjustContentInsets={false}
+        />
+        </View>
+      </View>
+    );
   };
 
   const HomeScreen = ({ navigation }) => {
@@ -833,7 +861,16 @@ export const App = () => {
       height: 380, 
 
     },
-  });
+    webViewContainer: {
+      width: '100%',
+      height: '90%',
+    },
+    webView: {
+      flex: 1,
+      transform: [{ rotate: '90deg' }]
+    },
+    
+});
 
 
   const Stack = createStackNavigator();
