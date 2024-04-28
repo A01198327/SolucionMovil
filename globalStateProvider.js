@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 
 const initialState = {
   idEmpleado: 0, 
-  direccion: 'localhost',
+  direccion: 'direccion',
   puerto: 5500,
 };
 

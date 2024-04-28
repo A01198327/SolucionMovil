@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert, Modal } from 'react-native';
+import { ScrollView, View, TextInput, TouchableOpacity, StyleSheet, Text, ImageBackground, Button, Alert, Modal} from 'react-native';
 import { TouchableHighlight } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { WebView } from 'react-native-webview';
 import { useFonts } from 'expo-font'; 
 import * as SplashScreen from 'expo-splash-screen'; 
 import { useEffect } from 'react';
 import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
+import * as WebBrowser from 'expo-web-browser';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from 'expo-file-system';
 import { GlobalStateProvider, useGlobalState } from './globalStateProvider';
@@ -49,6 +51,7 @@ export const App = () => {
     const [modalVisibleBranch, setModalVisibleBranch] = useState(false);
     const [file, setFile] = useState(null);
     const [error, setError] = useState(null);
+    const [maxReportes, setMaxReportes] = useState(null);
     const { state, dispatch } = useGlobalState();
 
     useEffect(() => {
@@ -67,7 +70,7 @@ export const App = () => {
     const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
       try {
-        const response = await axios.post(`http://${state.direccion}:${state.puerto}/insertReporte`, {
+        const response = await axios.post(`${state.direccion}/insertReporte`, {
           titulo: titulo,
           descripcion: desc,
           tienda: tienda,
@@ -87,6 +90,7 @@ export const App = () => {
     
     const pickImage = async () => {
       try {
+        getMax();
         const result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
           console.log(maxReportes);
@@ -97,7 +101,7 @@ export const App = () => {
           const type = match ? `${match[1]}` : `jpg`;
           uploadImage(localUri, fileName);
                 
-        {/* await FileSystem.uploadAsync('http://${state.direccion}:${state.puerto}/insertImage', localUri, {
+        {/* await FileSystem.uploadAsync('${state.direccion}/insertImage', localUri, {
             httpMethod: 'POST',
             uploadType: FileSystem.FileSystemUploadType.MULTIPART,
             fieldName: 'file'
@@ -118,26 +122,28 @@ export const App = () => {
               const response = await fetch(imageUri);
               const blob = await response.blob();
               file = new File([blob], `image${maxReportes + 1}.jpg`);
-          } else {
-              const fileInfo = await FileSystem.getInfoAsync(imageUri);
-              const blob = await FileSystem.readAsStringAsync(imageUri, { encoding: FileSystem.EncodingType.Base64 });
-              const fileType = fileInfo.uri.split('.').pop();
-              file = new File([blob], filename, { type: `image/${fileType}` });
-          }
-  
-          formData.append('file', file);
-  
-          const uploadResponse = await fetch(`http://${state.direccion}:${state.puerto}/insertImage`, {
-              method: 'POST',
-              body: formData,
+              formData.append('file', file);
+              const uploadResponse = await fetch(`${state.direccion}/insertImage`, {
+                  method: 'POST',
+                  body: formData,
           });
-  
           if (uploadResponse.ok) {
-              const responseData = await uploadResponse.json();
-              console.log('Upload successful:', responseData);
+            const responseData = await uploadResponse.json();
+            console.log('Upload successful:', responseData);
+        } else {
+            console.error('Upload failed:', uploadResponse.statusText);
+        }
+  
           } else {
-              console.error('Upload failed:', uploadResponse.statusText);
+              await FileSystem.uploadAsync(`${state.direccion}/insertImage`, imageUri, {
+                httpMethod: 'POST',
+                uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+                fieldName: 'file'
+              });
           }
+  
+          
+          
       } catch (error) {
           console.error('Error uploading image:', error);
       }
@@ -148,7 +154,7 @@ export const App = () => {
     
 
     const getMax = async () => {
-      fetch(`http://${state.direccion}:${state.puerto}/getMax`)
+      fetch(`${state.direccion}/getMax`)
         .then(response  => response.json())
         .then(data => setMaxReportes(data["data"][0]['']))
         .catch(error => console.log(error));
@@ -291,7 +297,7 @@ export const App = () => {
       const fetchReportes = async () => {
         try{
           console.log(state.idEmpleado);
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`${state.direccion}/reportesUsuario?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           console.log(data);
           const pendientesData = data.data.filter(report => report.Estatus === 'Abierto');
@@ -353,7 +359,7 @@ export const App = () => {
       const fetchUsuarios = async () => {
         try{
           //console.log(state.idEmpleado);
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleados`);
+          const response = await fetch(`${state.direccion}/getEmpleados`);
           const data = await response.json();
           console.log(data);
           setUsuarios(data.data);        }
@@ -364,7 +370,7 @@ export const App = () => {
 
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`${state.direccion}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           console.log(perfil);
@@ -383,6 +389,7 @@ export const App = () => {
         <Text style={styles.headerR}>Top Reporters</Text>
   
         <View style={styles.grayContainerR}>
+<<<<<<< HEAD
           
         {usuarios.map((usuario, index) => (
           <div key={index}>
@@ -398,12 +405,28 @@ export const App = () => {
             </div>
           </div>
             
+=======
+          {usuarios.map((usuario, index) => (
+            <View key={index} style={{ flexDirection: 'row' }}>
+              <View style={{ width: '49%' }}>
+                <Text style={styles.title2}>
+                  {usuario.Nombre}
+                </Text>
+              </View>
+              <View style={{ width: '49%', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.title2}>
+                  {usuario.Puntos}
+                </Text>
+              </View>
+            </View>
+>>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
           ))}
         </View>
   
         <Text style={styles.labelR}>Tu</Text>
   
         <View style={styles.grayContainerR2}>
+<<<<<<< HEAD
         {perfil?.map((perfil, index) => (
           <div key={index}>
             <div style={{width: '49%', float: 'left', marginTop:'10'}}>
@@ -418,8 +441,22 @@ export const App = () => {
             </div>
           </div>
             
+=======
+          {perfil?.map((perfil, index) => (
+            <View key={index} style={{ flexDirection: 'row' }}>
+              <View style={{ width: '49%' }}>
+                <Text style={styles.title2}>
+                  {perfil.Nombre}
+                </Text>
+              </View>
+              <View style={{ width: '49%', justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.title2}>
+                  {perfil.Puntos}
+                </Text>
+              </View>
+            </View>
+>>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
           ))}
-          
         </View>
       </View>
     );
@@ -432,7 +469,7 @@ export const App = () => {
     useEffect(() => {
       const getPerfil = async () =>{
         try {
-          const response = await fetch(`http://${state.direccion}:${state.puerto}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
+          const response = await fetch(`${state.direccion}/getEmpleadoById?IdEmpleado=${state.idEmpleado}`);
           const data = await response.json();
           setPerfil(data.data);
           
@@ -450,6 +487,7 @@ export const App = () => {
   
         <View style={styles.grayContainerP}>
           {perfil?.map((perfil, index) => (
+<<<<<<< HEAD
             <div key={index}>
               <div style={{width: '49%', float: 'left'}}>
                 <Text style={styles.label}>
@@ -464,6 +502,17 @@ export const App = () => {
             </div>
               
             ))}
+=======
+            <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <Text style={styles.title2}>
+                {perfil.Nombre}
+              </Text>
+              <Text style={styles.title2}>
+                {perfil.Puntos}
+              </Text>
+            </View>
+          ))}
+>>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
         </View>
   
         <Text style={styles.labelP}>Mis logros</Text>
@@ -477,7 +526,16 @@ export const App = () => {
 
 
   const GameScreen = () => {
-    return <Text>Esta es la pantalla de Minijuego</Text>;
+    const { state, dispatch } = useGlobalState();
+    const unityHTMLUrl = `${state.direccion}/game/index.html`;
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Peak Gaming</Text>
+        <TouchableOpacity style={styles.button} onPress={async () => WebBrowser.openBrowserAsync(unityHTMLUrl)}>
+                <Text style={styles.buttonText}>Abrir el Juego</Text>
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   const HomeScreen = ({ navigation }) => {
@@ -840,8 +898,21 @@ export const App = () => {
       width: 350,
       height: 110 
     },
+<<<<<<< HEAD
     
   });
+=======
+    webViewContainer: {
+      width: '100%',
+      height: '90%',
+    },
+    webView: {
+      flex: 1,
+      transform: [{ rotate: '90deg' }]
+    },
+    
+});
+>>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
 
 
   const Stack = createStackNavigator();
