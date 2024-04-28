@@ -317,7 +317,7 @@ export const App = () => {
           {/* Aquí funciones de los reportes pendientes */}
           <View style={[styles.grayContainer, {height: '500px'}]}>
           {pendientes.map((reporte, index) => (
-            <Text key={index} style={styles.title2}>
+            <Text key={index} style={styles.label}>
               {reporte.Titulo}
             </Text>
           ))}
@@ -387,12 +387,12 @@ export const App = () => {
         {usuarios.map((usuario, index) => (
           <div key={index}>
             <div style={{width: '49%', float: 'left'}}>
-              <Text style={styles.title2}>
+              <Text style={styles.label}>
                 {usuario.Nombre} 
               </Text>
             </div>
             <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
-              <Text style={[styles.title2]}>
+              <Text style={[styles.label]}>
                 {usuario.Puntos} 
               </Text>
             </div>
@@ -407,12 +407,12 @@ export const App = () => {
         {perfil?.map((perfil, index) => (
           <div key={index}>
             <div style={{width: '49%', float: 'left'}}>
-              <Text style={styles.title2}>
+              <Text style={styles.label}>
                 {perfil.Nombre} 
               </Text>
             </div>
             <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
-              <Text style={[styles.title2]}>
+              <Text style={[styles.label]}>
                 {perfil.Puntos} 
               </Text>
             </div>
@@ -452,12 +452,12 @@ export const App = () => {
           {perfil?.map((perfil, index) => (
             <div key={index}>
               <div style={{width: '49%', float: 'left'}}>
-                <Text style={styles.title2}>
+                <Text style={styles.label}>
                   {perfil.Nombre} 
                 </Text>
               </div>
               <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
-                <Text style={[styles.title2]}>
+                <Text style={[styles.label]}>
                   {perfil.Puntos} 
                 </Text>
               </div>
