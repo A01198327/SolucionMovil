@@ -42,9 +42,10 @@ export const App = () => {
 
   const GenerateReportScreen = () => {
     const [title, setTitle] = useState('');
-    const [store, setStore] = useState('Seleccione la tienda');
-    const [branch, setBranch] = useState('Seleccione la sucursal');
+    const [store, setStore] = useState('');
+    const [branch, setBranch] = useState('');
     const [description, setDescription] = useState('');
+    const [maxReportes, setMaxReportes] = useState();
     const [modalVisibleStore, setModalVisibleStore] = useState(false);
     const [modalVisibleBranch, setModalVisibleBranch] = useState(false);
     const [file, setFile] = useState(null);
@@ -82,8 +83,6 @@ export const App = () => {
         return { success: false, error: 'Error' };
       }
     };  
-
-    
     
     const pickImage = async () => {
       try {
@@ -160,7 +159,7 @@ export const App = () => {
               <Text style={styles.header2}>Genera tu reporte</Text>
               
               <Text style={styles.label}>Título (Descripción breve)</Text>
-              <TextInput style={styles.input} value={title} onChangeText={setTitle} />
+              <TextInput style={styles.inputreport} value={title} onChangeText={setTitle} />
       
               <Text style={styles.label}>Tienda</Text>
               <Modal
