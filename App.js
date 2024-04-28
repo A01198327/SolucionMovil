@@ -386,12 +386,12 @@ export const App = () => {
           
         {usuarios.map((usuario, index) => (
           <div key={index}>
-            <div style={{width: '49%', float: 'left'}}>
+            <div style={{width: '49%', float: 'left', marginTop:'10'}}>
               <Text style={styles.label}>
                 {usuario.Nombre} 
               </Text>
             </div>
-            <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
+            <div style={{width: '49%', float: 'left', textAlign: 'center', marginTop:'10'}}>
               <Text style={[styles.label]}>
                 {usuario.Puntos} 
               </Text>
@@ -406,12 +406,12 @@ export const App = () => {
         <View style={styles.grayContainerR2}>
         {perfil?.map((perfil, index) => (
           <div key={index}>
-            <div style={{width: '49%', float: 'left'}}>
+            <div style={{width: '49%', float: 'left', marginTop:'10'}}>
               <Text style={styles.label}>
                 {perfil.Nombre} 
               </Text>
             </div>
-            <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
+            <div style={{width: '49%', float: 'left', textAlign: 'center', marginTop:'10'}}>
               <Text style={[styles.label]}>
                 {perfil.Puntos} 
               </Text>
@@ -805,34 +805,42 @@ export const App = () => {
     },
     grayContainer2: {
       backgroundColor: '#dbd6d6',
-      alignSelf: 'flex-start',
+      alignSelf: 'center',
       padding: 10,
       borderRadius: 10,
       width: 350,
       height: 150, 
-      paddingLeft: 45
-    },
-    grayContainerR2: {
-      backgroundColor: '#dbd6d6',
-      borderRadius: 10,
-      width: 350,
-      height: 110 
-    },
-    grayContainerP: {
-      backgroundColor: '#dbd6d6',
-      borderRadius: 10,
-      marginTop: 20,
-      width: 350,
-      height: 110 
+      paddingLeft: 0
     },
     grayContainerR: {
       backgroundColor: '#dbd6d6',
+      alignSelf: 'center',
+      marginTop: 20,
+      padding: 10,
+      borderRadius: 10,
+      width: 350,
+      height: 380, 
+      paddingLeft: 0
+    },
+
+    grayContainerR2: {
+      backgroundColor: '#dbd6d6',
+      alignSelf: 'center',
+      padding: 10,
+      borderRadius: 10,
+      width: 350,
+      height: 150, 
+      paddingLeft: 0
+    },
+    grayContainerP: {
+      backgroundColor: '#dbd6d6',
+      alignSelf: 'flex-start',
       borderRadius: 10,
       marginTop: 20,
       width: 350,
-      height: 380, 
-
+      height: 110 
     },
+    
   });
 
 
