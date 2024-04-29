@@ -80,6 +80,7 @@ export const App = () => {
           });
       
           console.log('Response data:', response.data);
+          alert("Reporte subido con éxito")
           return response.data;
         } catch (error) {
           console.error('Error:', error);
