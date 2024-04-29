@@ -69,21 +69,27 @@ export const App = () => {
 
     const handleGenerateReport = async (titulo, desc, tienda, sucursal, IdEmpleado) => {
       console.log('Generar reporte');
-      try {
-        const response = await axios.post(`${state.direccion}/insertReporte`, {
-          titulo: titulo,
-          descripcion: desc,
-          tienda: tienda,
-          sucursal: sucursal,
-          IdEmpleado: IdEmpleado,
-        });
-    
-        console.log('Response data:', response.data);
-        return response.data;
-      } catch (error) {
-        console.error('Error:', error);
-        return { success: false, error: 'Error' };
+      if(file != null && title != null && description != null && store != null && branch != null){
+        try {
+          const response = await axios.post(`${state.direccion}/insertReporte`, {
+            titulo: titulo,
+            descripcion: desc,
+            tienda: tienda,
+            sucursal: sucursal,
+            IdEmpleado: IdEmpleado,
+          });
+      
+          console.log('Response data:', response.data);
+          return response.data;
+        } catch (error) {
+          console.error('Error:', error);
+          return { success: false, error: 'Error' };
+        }
       }
+      else{
+        alert("Por favor llena todos los campos");
+      }
+      
     };  
 
     
@@ -94,26 +100,16 @@ export const App = () => {
         const result = await ImagePicker.launchImageLibraryAsync();
         if (!result.cancelled) {
           console.log(maxReportes);
-          const formData = new FormData();
           const localUri = result.assets[0].uri;
-          const fileName = localUri.split('/').pop();
-          const match = /\.(w+)$/.exec(fileName);
-          const type = match ? `${match[1]}` : `jpg`;
-          uploadImage(localUri, fileName);
-                
-        {/* await FileSystem.uploadAsync('${state.direccion}/insertImage', localUri, {
-            httpMethod: 'POST',
-            uploadType: FileSystem.FileSystemUploadType.MULTIPART,
-            fieldName: 'file'
-          });
-        */}
+          setFile(localUri);
+          uploadImage(localUri);
         }
       } catch (error) {
         console.error('Error:', error);
       }
     };
 
-    const uploadImage = async (imageUri, filename) => {
+    const uploadImage = async (imageUri) => {
       try {
           let formData = new FormData();
           let file;
