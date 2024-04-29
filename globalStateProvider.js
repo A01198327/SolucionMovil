@@ -2,7 +2,7 @@ import React, { createContext, useContext, useReducer } from 'react';
 
 const initialState = {
   idEmpleado: 0, 
-  direccion: 'direccion',
+  direccion: 'http://40.233.21.29:5500',
   puerto: 5500,
 };
 

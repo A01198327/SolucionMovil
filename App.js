@@ -389,23 +389,6 @@ export const App = () => {
         <Text style={styles.headerR}>Top Reporters</Text>
   
         <View style={styles.grayContainerR}>
-<<<<<<< HEAD
-          
-        {usuarios.map((usuario, index) => (
-          <div key={index}>
-            <div style={{width: '49%', float: 'left', marginTop:'10'}}>
-              <Text style={styles.label}>
-                {usuario.Nombre} 
-              </Text>
-            </div>
-            <div style={{width: '49%', float: 'left', textAlign: 'center', marginTop:'10'}}>
-              <Text style={[styles.label]}>
-                {usuario.Puntos} 
-              </Text>
-            </div>
-          </div>
-            
-=======
           {usuarios.map((usuario, index) => (
             <View key={index} style={{ flexDirection: 'row' }}>
               <View style={{ width: '49%' }}>
@@ -419,29 +402,12 @@ export const App = () => {
                 </Text>
               </View>
             </View>
->>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
           ))}
         </View>
   
         <Text style={styles.labelR}>Tu</Text>
   
         <View style={styles.grayContainerR2}>
-<<<<<<< HEAD
-        {perfil?.map((perfil, index) => (
-          <div key={index}>
-            <div style={{width: '49%', float: 'left', marginTop:'10'}}>
-              <Text style={styles.label}>
-                {perfil.Nombre} 
-              </Text>
-            </div>
-            <div style={{width: '49%', float: 'left', textAlign: 'center', marginTop:'10'}}>
-              <Text style={[styles.label]}>
-                {perfil.Puntos} 
-              </Text>
-            </div>
-          </div>
-            
-=======
           {perfil?.map((perfil, index) => (
             <View key={index} style={{ flexDirection: 'row' }}>
               <View style={{ width: '49%' }}>
@@ -455,7 +421,6 @@ export const App = () => {
                 </Text>
               </View>
             </View>
->>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
           ))}
         </View>
       </View>
@@ -487,22 +452,6 @@ export const App = () => {
   
         <View style={styles.grayContainerP}>
           {perfil?.map((perfil, index) => (
-<<<<<<< HEAD
-            <div key={index}>
-              <div style={{width: '49%', float: 'left'}}>
-                <Text style={styles.label}>
-                  {perfil.Nombre} 
-                </Text>
-              </div>
-              <div style={{width: '49%', float: 'left', textAlign: 'center'}}>
-                <Text style={[styles.label]}>
-                  {perfil.Puntos} 
-                </Text>
-              </div>
-            </div>
-              
-            ))}
-=======
             <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <Text style={styles.title2}>
                 {perfil.Nombre}
@@ -512,7 +461,6 @@ export const App = () => {
               </Text>
             </View>
           ))}
->>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
         </View>
   
         <Text style={styles.labelP}>Mis logros</Text>
@@ -527,7 +475,7 @@ export const App = () => {
 
   const GameScreen = () => {
     const { state, dispatch } = useGlobalState();
-    const unityHTMLUrl = `${state.direccion}/game/index.html`;
+    const unityHTMLUrl = `https://server-whirlcheck.onrender.com/game/index.html`;
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Peak Gaming</Text>
@@ -898,21 +846,8 @@ export const App = () => {
       width: 350,
       height: 110 
     },
-<<<<<<< HEAD
     
   });
-=======
-    webViewContainer: {
-      width: '100%',
-      height: '90%',
-    },
-    webView: {
-      flex: 1,
-      transform: [{ rotate: '90deg' }]
-    },
-    
-});
->>>>>>> 48f9bbfc2f6ccfa53e4578b24dc08c0d8f461999
 
 
   const Stack = createStackNavigator();
